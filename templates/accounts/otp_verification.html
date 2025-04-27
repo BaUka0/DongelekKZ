@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Подтверждение входа{% endblock %}
+
+{% block content %}
+<main class="content-container">
+    <h2>Подтверждение входа</h2>
+    <p>Введите код, отправленный на вашу почту.</p>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="button-link">Подтвердить</button>
+    </form>
+    <form method="post" action="{% url 'resend_otp' %}">
+        {% csrf_token %}
+        <button type="submit" class="button-link">Переотправить код</button>
+    </form>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</main>
+{% endblock %}

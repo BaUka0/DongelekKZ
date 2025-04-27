@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if object %}Өзгерту: {{ object }}{% else %}Жаңа жариялау{% endif %}{% endblock %}
+
+{% block content %}
+     <main class="content-container">
+<h2>{% if object %}Жариялауды өзгерту{% else %}Жаңа жариялау қосу{% endif %}</h2>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="button-link">{% if object %}Сақтау{% else %}Қосу{% endif %}</button>
+     <a href="{% if object %}{{ object.get_absolute_url }}{% else %}{% url 'index' %}{% endif %}" class="button-link" style="background-color: #6c757d; margin-left: 10px;">Бас тарту</a>
+</form>
+     </main>
+{% endblock %}

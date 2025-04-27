@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Тіркелу{% endblock %}
+
+{% block content %}
+<main class="content-container">
+    <h2>Жаңа аккаунт құру</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="button-link">Тіркелу</button>
+    </form>
+    <p>Аккаунтыңыз бар ма? <a href="{% url 'login' %}">Кіру</a></p>
+</main>
+{% endblock %}

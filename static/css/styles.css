@@ -1,0 +1,1216 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background-color: #f4f4f8;
+    color: #333;
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+a {
+    color: #0056b3;
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+}
+
+a:hover {
+    color: #003d80;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin-bottom: 0.8em;
+    color: #444;
+    line-height: 1.3;
+}
+h1 { font-size: 2.2em; }
+h2 { font-size: 1.8em; }
+h3 { font-size: 1.5em; }
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo a {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #333;
+    text-decoration: none;
+}
+.logo a:hover {
+    text-decoration: none;
+    color: #0056b3;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+}
+
+nav li {
+    margin-left: 20px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #555;
+    font-weight: 500;
+    padding: 5px 0;
+    transition: color 0.2s ease;
+}
+
+nav a:hover, nav a.active {
+    color: #0056b3;
+    text-decoration: none;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+}
+
+.user-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    margin-right: 10px;
+    vertical-align: middle;
+    object-fit: cover;
+    border: 2px solid #eee;
+}
+
+.user-info span, .user-info a, .user-info form button {
+    margin-left: 15px;
+}
+
+.user-info form {
+    display: inline;
+    margin: 0;
+    padding: 0;
+}
+
+.user-name a {
+    font-weight: 500;
+    color: #333;
+}
+.user-name a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+button, .button-link {
+    display: inline-block;
+    padding: 10px 18px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 1em;
+    font-weight: 500;
+    text-align: center;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+button:hover, .button-link:hover {
+    background-color: #0056b3;
+    color: white;
+    text-decoration: none;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+button:active, .button-link:active {
+     transform: translateY(1px);
+     box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+/* Варианты кнопок */
+.button-link.delete, button.delete {
+    background-color: #dc3545;
+}
+.button-link.delete:hover, button.delete:hover {
+    background-color: #c82333;
+}
+
+.button-link.edit, button.edit {
+    background-color: #ffc107;
+    color: #212529;
+}
+.button-link.edit:hover, button.edit:hover {
+    background-color: #e0a800;
+    color: #212529;
+}
+
+.button-link.secondary, button.secondary {
+    background-color: #6c757d;
+}
+.button-link.secondary:hover, button.secondary:hover {
+    background-color: #5a6268;
+}
+
+.content-container {
+    max-width: 1140px;
+    margin: 30px auto;
+    padding: 20px 30px;
+    background: transparent;
+    box-shadow: none;
+    border-radius: 0;
+}
+.content-container h1 {
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+form {
+    margin-top: 20px;
+    padding: 25px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+.content-container > form {
+    background-color: #fff;
+}
+
+
+form p {
+    margin-bottom: 15px;
+}
+
+form label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+    color: #555;
+    font-size: 0.95em;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="file"],
+textarea,
+select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+    margin-bottom: 5px;
+    background-color: #fdfdfd;
+}
+
+input[type="file"] {
+    padding: 8px;
+    background-color: #fff;
+}
+
+textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: #80bdff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+    background-color: #fff;
+}
+
+.errorlist {
+    list-style: none;
+    padding: 10px 15px;
+    margin: -10px 0 15px 0;
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+.errorlist li {
+    margin-bottom: 5px;
+}
+.errorlist li:last-child {
+     margin-bottom: 0;
+}
+
+
+.messages {
+    list-style: none;
+    padding: 0;
+    margin: 20px auto;
+    max-width: 960px;
+}
+.messages li {
+    padding: 15px 20px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid transparent;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.messages li.success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+.messages li.error {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+.messages li.warning {
+    color: #856404;
+    background-color: #fff3cd;
+    border-color: #ffeeba;
+}
+.messages li.info {
+    color: #0c5460;
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+}
+
+.car-list {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+}
+
+.car-item {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #e0e0e0;
+    background-color: #fff;
+    border-radius: 8px;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.car-item:hover {
+    box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+    transform: translateY(-3px);
+}
+
+.car-item-image {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+}
+
+.car-item-image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+.car-item:hover .car-item-image img {
+     transform: scale(1.05);
+}
+
+.car-item-content {
+    padding: 15px 20px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.car-item h2 {
+    font-size: 1.3em;
+    font-weight: 600;
+    margin-bottom: 10px;
+    line-height: 1.3;
+}
+
+.car-item h2 a {
+    color: #333;
+    text-decoration: none;
+}
+
+.car-item h2 a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+.car-details {
+    margin-bottom: 15px;
+    flex-grow: 1;
+}
+
+.car-item p {
+    font-size: 0.95em;
+    color: #555;
+    margin-bottom: 6px;
+    line-height: 1.5;
+}
+
+.car-item p strong {
+    color: #333;
+    min-width: 60px;
+    display: inline-block;
+    font-weight: 500;
+}
+
+.car-price {
+    font-size: 1.15em;
+    font-weight: bold;
+    color: #0056b3;
+    margin-bottom: 8px !important;
+}
+.car-price strong {
+    color: #0056b3;
+    font-weight: bold;
+}
+
+.car-actions {
+    margin-top: auto;
+    padding-top: 15px;
+    border-top: 1px solid #f0f0f0;
+    text-align: right;
+}
+
+.car-actions .button-link {
+    padding: 6px 12px;
+    font-size: 0.85em;
+    margin-left: 8px;
+    margin-right: 0;
+    margin-bottom: 0;
+}
+
+.add-new-car-button-container {
+    text-align: center;
+    margin-top: 40px; /* Больше отступ сверху */
+    padding-top: 25px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.car-details-container {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    padding: 30px;
+    max-width: 800px;
+}
+.car-details-container h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #333;
+    font-size: 2em;
+}
+
+.car-image {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+#carImage {
+    max-width: 100%;
+    height: auto;
+    max-height: 500px;
+    border-radius: 5px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border: 1px solid #eee;
+}
+
+.detail-section {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+.detail-section:last-of-type {
+    border-bottom: none;
+}
+
+detail-section h3 {
+    margin-bottom: 15px;
+    color: #0056b3;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 8px;
+    font-size: 1.4em;
+}
+
+detail-item {
+    margin-bottom: 12px;
+    font-size: 1.1em;
+    color: #444;
+}
+
+detail-item strong {
+    display: inline-block;
+    min-width: 110px;
+    color: #333;
+    font-weight: 500;
+}
+
+#carDescription {
+    line-height: 1.7;
+    color: #555;
+    font-size: 1.1em;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid #eee;
+}
+
+.back-button, .detail-actions {
+    margin-top: 25px;
+}
+.detail-actions .button-link {
+    margin-right: 10px;
+}
+.pagination {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 25px;
+    border-top: 1px solid #eee;
+}
+
+.step-links a, .step-links .current {
+    margin: 0 5px;
+    padding: 8px 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.step-links a {
+    color: #007bff;
+    background-color: #fff;
+}
+.step-links a:hover {
+    background-color: #e9ecef;
+    text-decoration: none;
+    border-color: #ccc;
+}
+
+.step-links .current {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+    font-weight: bold;
+    cursor: default;
+}
+
+footer {
+    text-align: center;
+    padding: 25px;
+    margin-top: 40px;
+    background-color: #e9ecef;
+    color: #6c757d;
+    border-top: 1px solid #dee2e6;
+    font-size: 0.9em;
+}
+
+/* === Добавления в static/css/styles.css === */
+
+/* --- Стили для Плавающей Кнопки (FAB) --- */
+.chatbot-fab {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    font-size: 28px; /* Размер иконки */
+    line-height: 60px; /* Центрирование иконки */
+    text-align: center;
+    cursor: pointer;
+    z-index: 999; /* Поверх других элементов */
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+.chatbot-fab:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+/* --- Стили для Контейнера Виджета Чата --- */
+.chatbot-widget-container {
+    position: fixed;
+    bottom: 100px; /* Отступ от FAB */
+    right: 30px;
+    width: 90%;
+    max-width: 400px; /* Меньше, чем в оригинале */
+    height: 70vh;
+    max-height: 550px; /* Меньше, чем в оригинале */
+    z-index: 998; /* Под FAB, но над остальным */
+    border-radius: 10px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    overflow: hidden; /* Скрыть вылезающее */
+    display: none; /* Изначально скрыт */
+    flex-direction: column; /* Для внутренней структуры */
+    background-color: #fff; /* Фон самого контейнера */
+}
+
+/* Адаптируем стили из Flask-примера, добавляя префикс .chatbot-instance */
+.chatbot-instance {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    border-radius: 0; /* Убираем у внутреннего контейнера, если внешний скруглен */
+    box-shadow: none;
+}
+
+.chatbot-header {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    font-size: 1.2rem;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.chatbot-close-button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    line-height: 1;
+    padding: 0 5px;
+    cursor: pointer;
+    opacity: 0.8;
+}
+.chatbot-close-button:hover {
+    opacity: 1;
+}
+
+.chatbot-history {
+    flex-grow: 1;
+    padding: 15px;
+    overflow-y: auto;
+    border-bottom: 1px solid #e0e0e0;
+    background-color: #f9f9f9; /* Легкий фон для истории */
+}
+/* Стили для .message, .message.user, .message.bot и т.д. остаются почти такими же, */
+/* но убедитесь, что они применяются внутри .chatbot-history */
+.chatbot-history .message { margin-bottom: 12px; /* Отступ между сообщениями */ max-width: 75%; /* Ограничиваем ширину сообщений */ }
+.chatbot-history .message .sender { font-size: 0.75em; }
+.chatbot-history .message .text-bubble { padding: 12px 16px; /* Отступы внутри сообщений */ font-size: 0.95em; /* Размер шрифта */ line-height: 1.4; /* Межстрочный интервал */ box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Лёгкая тень */ border-radius: 18px; /* Скруглённые углы */ }
+.chatbot-history .message .timestamp { font-size: 0.75em; }
+.chatbot-history .message.user { align-items: flex-end; }
+.chatbot-history .message.user .text-bubble { background-color: #007bff; color: white; border-top-right-radius: 4px; border-top-left-radius: 18px; margin-right: 0; /* Убираем отступ справа */ }
+.chatbot-history .message.bot { align-items: flex-start; }
+.chatbot-history .message.bot .text-bubble { background-color: #f1f1f1; color: #333; border-top-left-radius: 4px; border-top-right-radius: 18px; margin-left: 0; /* Убираем отступ слева */ }
+.chatbot-history .message.typing-indicator .text-bubble { background-color: #e9eaf0; color: #888; font-style: italic; }
+.chatbot-history .typing-dot { /* Анимация остается */
+    display: inline-block; width: 6px; height: 6px; background-color: #888;
+    border-radius: 50%; margin: 0 2px; animation: typing 1.2s infinite ease-in-out;
+}
+.chatbot-history .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.chatbot-history .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes typing { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+
+.chatbot-input-area {
+    padding: 10px 15px;
+    border-top: 1px solid #e0e0e0;
+    background-color: #f0f2f5;
+    display: flex;
+    flex-shrink: 0; /* Не сжимать инпут */
+}
+.chatbot-form { display: flex; width: 100%; }
+#chatbot-message-input {
+    flex-grow: 1;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    font-size: 0.95rem;
+    outline: none;
+    margin-right: 8px;
+}
+#chatbot-send-button {
+    padding: 8px 18px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: background-color 0.2s;
+}
+#chatbot-send-button:hover { background-color: #0056b3; }
+#chatbot-send-button:disabled { background-color: #a0d0ff; cursor: not-allowed; }
+
+#chatbot-voice-button {
+    padding: 8px 12px;
+    border: none;
+    background-color: #28a745;
+    color: white;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    margin-right: 8px;
+    transition: background-color 0.2s;
+}
+
+#chatbot-voice-button:hover {
+    background-color: #218838;
+}
+
+.chatbot-clear-container {
+    text-align: center;
+    padding: 8px;
+    background-color: #f9f9f9;
+    border-top: 1px solid #eee;
+    flex-shrink: 0; /* Не сжимать */
+}
+#chatbot-clear-button { /* Стилизуем кнопку */
+    padding: 8px 16px; background-color: #dc3545; /* Менее яркий фон */
+    color: white; /* Более нейтральный текст */
+    border: none; border-radius: 5px; cursor: pointer; font-size: 0.9em; /* Уменьшенный текст */
+    transition: background-color 0.2s ease;
+}
+#chatbot-clear-button:hover { background-color: #c82333; /* Лёгкий эффект при наведении */ }
+
+/* Кнопка закрытия чата */
+.chatbot-close-button i {
+    font-size: 18px;
+}
+
+/* Кнопка отправки сообщения */
+#chatbot-send-button i {
+    font-size: 16px;
+    margin-right: 5px;
+}
+
+/* Кнопка очистки истории */
+#chatbot-clear-button i {
+    font-size: 14px;
+    margin-right: 5px;
+}
+
+/* Заголовок чата с иконкой */
+.chatbot-header span i {
+    margin-right: 8px;
+    font-size: 18px;
+}
+
+.voice-status {
+    margin-left: 10px;
+    font-size: 0.9rem;
+    color: #28a745; /* Зеленый цвет для активного состояния */
+    font-weight: bold;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* Стили сообщений в истории чата */
+.chatbot-history .message {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 12px; /* Отступ между сообщениями */
+    max-width: 100%; /* Ограничиваем ширину сообщений */
+}
+
+.chatbot-history .message.user {
+    align-self: flex-end; /* Выравниваем сообщения пользователя вправо */
+    text-align: right;
+}
+
+.chatbot-history .message.bot {
+    align-self: flex-start; /* Выравниваем сообщения бота влево */
+    text-align: left;
+}
+
+.chatbot-history .message .text-bubble {
+    padding: 12px 16px; /* Отступы внутри сообщений */
+    border-radius: 18px; /* Скруглённые углы */
+    font-size: 0.95em; /* Размер шрифта */
+    line-height: 1.4; /* Межстрочный интервал */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Лёгкая тень */
+    word-wrap: break-word; /* Перенос слов */
+    word-break: break-word;
+}
+
+.chatbot-history .message.user .text-bubble {
+    background-color: #007bff; /* Синий фон для сообщений пользователя */
+    color: white;
+    border-top-right-radius: 4px; /* Скругление только с одной стороны */
+    margin-right: 0; /* Убираем отступ справа */
+}
+
+.chatbot-history .message.bot .text-bubble {
+    background-color: #f1f1f1; /* Светло-серый фон для сообщений бота */
+    color: #333;
+    border-top-left-radius: 4px; /* Скругление только с одной стороны */
+    margin-left: 0; /* Убираем отступ слева */
+}
+
+/* Стили для временных меток */
+.chatbot-history .message .timestamp {
+    font-size: 0.75em;
+    color: #888;
+    margin-top: 4px;
+    opacity: 0.8;
+}
+
+/* Темный режим */
+body.dark-mode {
+    background-color: #121212;
+    color: #e0e0e0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+body.dark-mode a {
+    color: #90caf9;
+}
+
+body.dark-mode a:hover {
+    color: #bbdefb;
+}
+
+body.dark-mode h1, 
+body.dark-mode h2, 
+body.dark-mode h3, 
+body.dark-mode h4, 
+body.dark-mode h5, 
+body.dark-mode h6 {
+    color: #ffffff;
+}
+
+body.dark-mode button, 
+body.dark-mode .button-link {
+    background-color: #333;
+    color: #e0e0e0;
+    font-family: inherit;
+}
+
+body.dark-mode button:hover, 
+body.dark-mode .button-link:hover {
+    background-color: #555;
+}
+
+body.dark-mode input[type="text"],
+body.dark-mode input[type="email"],
+body.dark-mode input[type="password"],
+body.dark-mode input[type="number"],
+body.dark-mode textarea,
+body.dark-mode select {
+    color: #e0e0e0;
+    background-color: #333;
+    border: 1px solid #555;
+}
+
+body.dark-mode input::placeholder,
+body.dark-mode textarea::placeholder {
+    color: #888;
+}
+
+body.dark-mode .messages li {
+    color: #e0e0e0;
+}
+
+body.dark-mode .header-container {
+    background-color: #1e1e1e;
+    border-bottom: 1px solid #333;
+}
+
+body.dark-mode .content-container {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .content-container h2 {
+    color: #90caf9;
+}
+
+body.dark-mode form {
+    background-color: #333;
+    border: 1px solid #555;
+    color: #e0e0e0;
+}
+
+body.dark-mode form label {
+    color: #90caf9;
+}
+
+body.dark-mode form input[type="text"],
+body.dark-mode form input[type="email"],
+body.dark-mode form input[type="password"],
+body.dark-mode form input[type="file"],
+body.dark-mode form textarea,
+body.dark-mode form select {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+    border: 1px solid #555;
+}
+
+body.dark-mode form input::placeholder,
+body.dark-mode form textarea::placeholder {
+    color: #888;
+}
+
+body.dark-mode form button {
+    background-color: #333;
+    color: #e0e0e0;
+}
+
+body.dark-mode form button:hover {
+    background-color: #555;
+}
+
+body.dark-mode footer {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+    border-top: 1px solid #333;
+}
+
+body.dark-mode nav a {
+    color: #e0e0e0;
+}
+
+body.dark-mode nav a:hover {
+    color: #90caf9;
+}
+
+body.dark-mode .user-avatar {
+    border: 2px solid #555;
+}
+
+body.dark-mode .chatbot-fab {
+    background-color: #333;
+    color: #e0e0e0;
+}
+
+body.dark-mode .chatbot-fab:hover {
+    background-color: #555;
+}
+
+body.dark-mode .car-list {
+    background-color: #1e1e1e;
+}
+
+body.dark-mode .car-item {
+    background-color: #1e1e1e;
+    border: 1px solid #333;
+    color: #e0e0e0;
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .car-item:hover {
+    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.2);
+    transform: translateY(-3px);
+}
+
+body.dark-mode .car-item h2 a {
+    color: #90caf9;
+}
+
+body.dark-mode .car-item h2 a:hover {
+    color: #bbdefb;
+}
+
+body.dark-mode .car-item p {
+    color: #b0bec5;
+}
+
+body.dark-mode .car-price {
+    color: #90caf9;
+}
+
+body.dark-mode .car-actions .button-link {
+    background-color: #333;
+    color: #e0e0e0;
+}
+
+body.dark-mode .car-actions .button-link:hover {
+    background-color: #555;
+}
+
+body.dark-mode .pagination .step-links a {
+    background-color: #333;
+    color: #90caf9;
+    border: 1px solid #555;
+}
+
+body.dark-mode .pagination .step-links a:hover {
+    background-color: #555;
+    color: #bbdefb;
+}
+
+body.dark-mode .pagination .step-links .current {
+    background-color: #90caf9;
+    color: #121212;
+    border: 1px solid #90caf9;
+}
+
+body.dark-mode .add-new-car-button-container a {
+    background-color: #333;
+    color: #e0e0e0;
+}
+
+body.dark-mode .add-new-car-button-container a:hover {
+    background-color: #555;
+}
+
+body.dark-mode .car-item h2 a {
+    color: #90caf9;
+}
+
+body.dark-mode .car-item h2 a:hover {
+    color: #bbdefb;
+}
+
+body.dark-mode .car-item p {
+    color: #b0bec5;
+}
+
+body.dark-mode .car-price {
+    color: #90caf9;
+}
+
+body.dark-mode .detail-section {
+    border-bottom: 1px solid #333;
+}
+
+body.dark-mode .detail-item {
+    color: #e0e0e0;
+}
+
+body.dark-mode .detail-item strong {
+    color: #90caf9;
+}
+
+body.dark-mode #carDescription {
+    background-color: #1e1e1e;
+    border: 1px solid #333;
+    color: #e0e0e0;
+}
+
+body.dark-mode .pagination .step-links a {
+    background-color: #333;
+    color: #90caf9;
+    border: 1px solid #555;
+}
+
+body.dark-mode .pagination .step-links a:hover {
+    background-color: #555;
+    color: #bbdefb;
+}
+
+body.dark-mode .pagination .step-links .current {
+    background-color: #90caf9;
+    color: #121212;
+    border: 1px solid #90caf9;
+}
+
+body.dark-mode .chatbot-widget-container {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+}
+
+body.dark-mode .chatbot-header {
+    background-color: #333;
+    color: #e0e0e0;
+}
+
+body.dark-mode .chatbot-history {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+}
+
+body.dark-mode .chatbot-history .message.user .text-bubble {
+    background-color: #333;
+    color: #e0e0e0;
+}
+
+body.dark-mode .chatbot-history .message.bot .text-bubble {
+    background-color: #444;
+    color: #e0e0e0;
+    font-family: inherit;
+}
+
+body.dark-mode .chatbot-input-area {
+    background-color: #1e1e1e;
+    border-top: 1px solid #333;
+}
+
+body.dark-mode #chatbot-message-input {
+    background-color: #333;
+    color: #e0e0e0;
+    border: 1px solid #555;
+}
+
+body.dark-mode #chatbot-send-button {
+    background-color: #333;
+    color: #e0e0e0;
+}
+
+body.dark-mode #chatbot-send-button:hover {
+    background-color: #555;
+}
+
+body.dark-mode #chatbot-clear-button {
+    background-color: #333;
+    color: #e0e0e0;
+}
+
+body.dark-mode #chatbot-clear-button:hover {
+    background-color: #555;
+}
+
+/* Темный режим для страницы деталей автомобиля */
+body.dark-mode .car-details-container {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .car-details-container h2 {
+    color: #90caf9;
+}
+
+body.dark-mode .car-image img {
+    border: 1px solid #333;
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .detail-section {
+    border-bottom: 1px solid #333;
+}
+
+body.dark-mode .detail-item {
+    color: #e0e0e0;
+}
+
+body.dark-mode .detail-item strong {
+    color: #90caf9;
+}
+
+body.dark-mode #carDescription {
+    background-color: #1e1e1e;
+    border: 1px solid #333;
+    color: #e0e0e0;
+}
+
+body.dark-mode .back-button a {
+    background-color: #333;
+    color: #e0e0e0;
+}
+
+body.dark-mode .back-button a:hover {
+    background-color: #555;
+}
+
+/* Темный режим для страницы профиля */
+body.dark-mode .content-container {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .content-container h2 {
+    color: #90caf9;
+}
+
+body.dark-mode form {
+    background-color: #333;
+    border: 1px solid #555;
+    color: #e0e0e0;
+}
+
+body.dark-mode form label {
+    color: #90caf9;
+}
+
+body.dark-mode form input[type="text"],
+body.dark-mode form input[type="email"],
+body.dark-mode form input[type="password"],
+body.dark-mode form input[type="file"],
+body.dark-mode form textarea,
+body.dark-mode form select {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+    border: 1px solid #555;
+}
+
+body.dark-mode form input::placeholder,
+body.dark-mode form textarea::placeholder {
+    color: #888;
+}
+
+body.dark-mode form button {
+    background-color: #333;
+    color: #e0e0e0;
+}
+
+body.dark-mode form button:hover {
+    background-color: #555;
+}
+
+/* Темный режим для страницы входа */
+body.dark-mode table {
+    color: #e0e0e0;
+}
+
+body.dark-mode table td {
+    padding: 8px;
+}
+
+body.dark-mode p {
+    color: #b0bec5;
+}
+
+body.dark-mode p a {
+    color: #90caf9;
+}
+
+body.dark-mode p a:hover {
+    color: #bbdefb;
+}
+
+/* Темный режим для страницы регистрации */
+body.dark-mode .content-container p {
+    color: #b0bec5;
+}
+
+body.dark-mode .content-container p a {
+    color: #90caf9;
+}
+
+body.dark-mode .content-container p a:hover {
+    color: #bbdefb;
+}

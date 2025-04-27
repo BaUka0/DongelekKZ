@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Басты бет - Автокөліктер{% endblock %}
+
+{% block content %}
+    <h1>Қол жетімді автокөліктер</h1>
+
+    {% if cars %}
+        <div class="car-list">
+            {% for car in cars %}
+                <div class="car-item">
+                    <div class="car-item-image">
+                        {% if car.image %}
+                            <a href="{{ car.get_absolute_url }}">
+                                <img src="{{ car.image.url }}" alt="{{ car.brand }} {{ car.model }}">
+                            </a>
+                        {% else %}
+                            <a href="{{ car.get_absolute_url }}">
+                                <img src="{% static 'images/placeholder.png' %}" alt="Сурет жоқ" style="object-fit: contain; background-color:#eee;">
+                            </a>
+                        {% endif %}
+                    </div>
+
+                    <div class="car-item-content">
+                        <h2><a href="{{ car.get_absolute_url }}">{{ car.brand }} {{ car.model }}</a></h2>
+
+                        <div class="car-details">
+                            <p class="car-price"><strong>Бағасы:</strong> ${{ car.price }}</p>
+                            <p class="car-year"><strong>Жылы:</strong> {{ car.year }}</p>
+                            <p class="car-seller"><strong>Сатушы:</strong> {{ car.seller.username }}</p>
+                        </div>
+
+                        <div class="car-actions">
+                            {% if user.is_authenticated %}
+                                {% if car.seller == user or user.is_admin %}
+                                    <a href="{% url 'car_update' car.pk %}" class="button-link edit">Өзгерту</a>
+                                    <a href="{% url 'car_delete' car.pk %}" class="button-link delete">Өшіру</a>
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        {% if is_paginated %}
+            <div class="pagination">
+                <span class="step-links">
+                    {% if page_obj.has_previous %}
+                        <a href="?page=1">« бірінші</a>
+                        <a href="?page={{ page_obj.previous_page_number }}">алдыңғы</a>
+                    {% endif %}
+
+                    <span class="current">
+                        Бет {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}.
+                    </span>
+
+                    {% if page_obj.has_next %}
+                        <a href="?page={{ page_obj.next_page_number }}">келесі</a>
+                        <a href="?page={{ page_obj.paginator.num_pages }}">соңғы »</a>
+                    {% endif %}
+                </span>
+            </div>
+        {% endif %}
+
+    {% else %}
+        <p>Әзірге жарияланған көліктер жоқ.</p>
+    {% endif %}
+
+    {% if user.is_authenticated and user.is_seller %}
+        <div class="add-new-car-button-container">
+            <a href="{% url 'car_create' %}" class="button-link">Жаңа жариялау қосу</a>
+        </div>
+    {% endif %}
+{% endblock %}

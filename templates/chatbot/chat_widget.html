@@ -1,0 +1,37 @@
+{% load static %}
+<div class="chatbot-widget-container" id="chatbot-widget" style="display: none;">
+    <div class="chat-container chatbot-instance">
+        <div class="chat-header chatbot-header">
+            <span><i class="fa-solid fa-robot"></i> AI chat-bot</span>
+            <button class="chatbot-close-button" id="chatbot-close-button" title="Закрыть чат">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+        <div class="chat-history chatbot-history" id="chatbot-history">
+            <div id="chatbot-anchor"></div>
+        </div>
+        <div class="chat-input-area chatbot-input-area">
+            <form id="chatbot-form" class="chatbot-form" action="javascript:void(0);">
+                <input type="text" id="chatbot-message-input" placeholder="Enter message..." autocomplete="off" required>
+                <button type="button" id="chatbot-voice-button" title="Голосовой ввод">
+                    <i class="fa-solid fa-microphone"></i>
+                </button>
+                <button type="submit" id="chatbot-send-button" title="Отправить">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
+            </form>
+        </div>
+        <div class="clear-button-container chatbot-clear-container">
+            <button type="button" id="chatbot-clear-button" title="Очистить историю">
+                <i class="fa-solid fa-trash"></i> Delete dialog
+            </button>
+        </div>
+    </div>
+</div>
+<div id="chatbot-urls"
+     data-load-history-url="{% url 'chatbot:load_history' %}"
+     data-get-response-url="{% url 'chatbot:get_response' %}"
+     data-clear-history-url="{% url 'chatbot:clear_history' %}"
+     data-csrf-token="{{ csrf_token }}"
+     style="display: none;">
+</div>

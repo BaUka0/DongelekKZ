@@ -1,0 +1,125 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="kz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Автокөлік Сату{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    {% block extra_head %}{% endblock %}
+    <style>
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+            vertical-align: middle;
+            object-fit: cover;
+        }
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #eee;
+            border-bottom: 1px solid #ccc;
+        }
+        .logo { font-size: 1.5em; font-weight: bold; }
+        nav ul { list-style: none; padding: 0; margin: 0; display: flex; }
+        nav li { margin-left: 15px; }
+        nav a { text-decoration: none; color: #333; }
+        .user-info { display: flex; align-items: center; }
+        .user-info span, .user-info a, .user-info form button { margin-left: 10px; }
+        .user-info form { display: inline; margin: 0; padding: 0; }
+        button, .button-link {
+            padding: 8px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+        button:hover, .button-link:hover {
+            background-color: #0056b3;
+        }
+        .content-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header-container">
+        <div class="logo"><a href="{% url 'index' %}" style="text-decoration:none; color: inherit;">Автокөлік Сату</a></div>
+        <nav>
+            <ul>
+                <li><a href="{% url 'index' %}">Басты бет</a></li>
+                {% if user.is_authenticated and user.is_seller %}
+                 <li><a href="{% url 'car_create' %}">Жариялау қосу</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+        <div class="user-info">
+            <button id="theme-toggle" class="button-link">🌙</button>
+            {% if user.is_authenticated %}
+                <img src="{{ user.avatar.url }}" alt="{{ user.username }} avatar" class="user-avatar">
+                <span class="user-name"><a href="{% url 'profile_update' %}">{{ user.username }}</a></span>
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="button-link">Шығу</button>
+                </form>
+            {% else %}
+                 <a href="{% url 'login' %}" class="button-link">Кіру</a>
+                 <a href="{% url 'signup' %}" class="button-link">Тіркелу</a>
+            {% endif %}
+        </div>
+    </header>
+
+
+         {% block content %}
+         {% endblock %}
+
+    <footer>
+    </footer>
+
+        {% if user.is_authenticated %}
+        <button class="chatbot-fab" id="chatbot-toggle-button" title="Открыть чат">
+            <i class="fa-regular fa-comment-dots"></i>
+        </button>
+        {% include 'chatbot/chat_widget.html' %}
+        {% endif %}
+    {# --- Конец Чат-бот --- #}
+
+
+    {% block extra_js_before %}{% endblock %}
+    {# Подключаем JS в любом случае, он будет проверять наличие элементов #}
+    <script src="{% static 'js/chatbot.js' %}" defer></script>
+    {% block extra_js %}{% endblock %}
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeToggleButton = document.getElementById('theme-toggle');
+            const currentTheme = localStorage.getItem('theme');
+
+            if (currentTheme === 'dark') {
+                document.body.classList.add('dark-mode');
+                themeToggleButton.textContent = '☀️';
+            }
+            themeToggleButton.addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+                const isDarkMode = document.body.classList.contains('dark-mode');
+                localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+                themeToggleButton.textContent = isDarkMode ? '☀️' : '🌙';
+            });
+        });
+    </script>
+
+</body>
+</html>

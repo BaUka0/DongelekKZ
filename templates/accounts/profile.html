@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Профильді өзгерту{% endblock %}
+
+{% block content %}
+     <main class="content-container">
+<h2>Профильді өзгерту</h2>
+<p>Ағымдағы аватар:</p>
+{% if user.avatar %}
+    <img src="{{ user.avatar.url }}" alt="{{ user.username }} avatar" style="max-width: 150px; height: auto; border-radius: 50%; margin-bottom: 15px;">
+{% else %}
+    <p>Аватар жүктелмеген.</p>
+{% endif %}
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="button-link">Сақтау</button>
+</form>
+    </main>
+{% endblock %}

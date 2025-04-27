@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Жоюды растау{% endblock %}
+
+{% block content %}
+     <main class="content-container">
+<h2>Сіз "{{ object }}" жариялауын жойғыңыз келетініне сенімдісіз бе?</h2>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="button-link" style="background-color: #dc3545;">Иә, жою</button>
+    <a href="{{ object.get_absolute_url }}" class="button-link" style="background-color: #6c757d; margin-left: 10px;">Жоқ, бас тарту</a>
+</form>
+     </main>
+{% endblock %}

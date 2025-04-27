@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Кіру{% endblock %}
+
+{% block content %}
+     <main class="content-container">
+<h2>Кіру</h2>
+{% if form.errors %}
+    <p style="color: red;">Пайдаланушы аты немесе құпия сөз қате. Қайталап көріңіз.</p>
+{% endif %}
+
+{% if next %}
+    {% if user.is_authenticated %}
+    <p>Сіздің аккаунтыңыздың бұл бетке кіруге рұқсаты жоқ. Жалғастыру үшін басқа аккаунтпен кіріңіз.</p>
+    {% else %}
+    <p>Бұл бетті көру үшін жүйеге кіріңіз.</p>
+    {% endif %}
+{% endif %}
+
+<form method="post" action="{% url 'login' %}">
+    {% csrf_token %}
+    <table>
+    <tr>
+        <td>{{ form.username.label_tag }}</td>
+        <td>{{ form.username }}</td>
+    </tr>
+    <tr>
+        <td>{{ form.password.label_tag }}</td>
+        <td>{{ form.password }}</td>
+    </tr>
+    </table>
+    <button type="submit" class="button-link">Кіру</button>
+    <input type="hidden" name="next" value="{{ next }}"> 
+</form>
+
+<p><a href="{% url 'password_reset' %}">Құпия сөзді ұмыттыңыз ба?</a></p>
+<p>Аккаунтыңыз жоқ па? <a href="{% url 'signup' %}">Тіркелу</a></p>
+      </main>
+{% endblock %}

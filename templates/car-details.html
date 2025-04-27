@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ car.brand }} {{ car.model }} - Егжей-тегжейлі ақпарат{% endblock %}
+
+{% block content %}
+<div class="car-details-container">
+    <h2 id="carModelHeading">{{ car.brand }} {{ car.model }}</h2>
+    <div class="car-image" style="text-align: center; margin-bottom: 20px;">
+         {% if car.image %}
+        <img id="carImage" src="{{ car.image.url }}" alt="{{ car.brand }} {{ car.model }} суреті" style="max-width: 100%; height: auto; max-height: 400px;">
+         {% else %}
+         <p>Сурет жоқ</p>
+         {% endif %}
+    </div>
+
+    <section class="detail-section">
+        <h3>Негізгі ақпарат</h3>
+        <div class="detail-item"><strong>Маркасы:</strong> <span id="carBrand">{{ car.brand }}</span></div>
+        <div class="detail-item"><strong>Моделі:</strong> <span id="carModel">{{ car.model }}</span></div>
+        <div class="detail-item"><strong>Жылы:</strong> <span id="carYear">{{ car.year }}</span></div>
+        <div class="detail-item"><strong>Жүрісі:</strong> <span id="carMileage">{{ car.mileage }} км</span></div>
+        <div class="detail-item"><strong>Бағасы:</strong> <span id="carPrice">${{ car.price }}</span></div>
+         <div class="detail-item"><strong>Сатушы:</strong> <span>{{ car.seller.username }}</span></div>
+    </section>
+
+    <section class="detail-section">
+        <h3>Сипаттама</h3>
+        <p id="carDescription">{{ car.description|linebreaksbr }}</p>
+    </section>
+
+            {% if user.is_authenticated %}
+                {% if car.seller == user or user.is_admin %}
+                <div style="margin-top: 20px;">
+                    <a href="{% url 'car_update' car.pk %}" class="button-link" style="background-color: #ffc107; color: black;">Өзгерту</a>
+                    <a href="{% url 'car_delete' car.pk %}" class="button-link" style="background-color: #dc3545;">Өшіру</a>
+                </div>
+                {% endif %}
+            {% endif %}
+
+    <div class="back-button" style="margin-top: 20px;">
+        <a href="{% url 'index' %}" class="button-link" style="background-color: #6c757d;">Басты бетке қайту</a>
+    </div>
+</div>
+{% endblock %}
