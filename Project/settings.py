@@ -123,6 +123,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
 # Дополнительно, если хочешь хранить общие статические файлы вне приложений
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static1')]
 
