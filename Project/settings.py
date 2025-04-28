@@ -16,6 +16,14 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
+INTELLIGENCE_API_URL = "https://api.intelligence.io.solutions/api/v1/chat/completions"
+INTELLIGENCE_MODEL_NAME = "google/gemma-3-27b-it"
+IOINTELLIGENCE_API_KEY = "io-v2-eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJvd25lciI6IjZjMmEyZmQ3LTNmZDEtNGEwMS1iZmQxLWYyNWVkNWQwODVkZSIsImV4cCI6NDg5OTQwODA2MH0.KPnm4GlJtE_vzJgrVvMOTSo_RnQpsHyXdtjKYdumJ8x7C8AB1q7traBBOrZ7GWIb_hZV9QIeyIeV759b6S3TQg"
+CHATBOT_SYSTEM_PROMPT = "Сен пайдалы ЖИ ассистент. Бір тілде жауап бер."
+CHATBOT_HISTORY_LENGTH = 10
+CHATBOT_MAX_TOKENS = 1024
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
