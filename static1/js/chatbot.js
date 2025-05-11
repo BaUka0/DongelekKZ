@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
+    console.log("Chatbot script loaded");
+    
     const chatbotWidget = document.getElementById('chatbot-widget');
     const chatHistory = document.getElementById('chatbot-history');
     const messageInput = document.getElementById('chatbot-message-input');
@@ -12,6 +14,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const GET_RESPONSE_URL = urlDiv?.dataset.getResponseUrl;
     const CLEAR_HISTORY_URL = urlDiv?.dataset.clearHistoryUrl;
     const CSRF_TOKEN = urlDiv?.dataset.csrfToken;
+
+    console.log("Toggle button found:", toggleButton !== null);
+    console.log("Widget found:", chatbotWidget !== null);
 
     if (!chatbotWidget || !toggleButton) {
         console.log("Chatbot toggle button or widget container not found (likely user not authenticated or base.html issue). Chatbot disabled.");
@@ -154,17 +159,32 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    toggleButton.addEventListener('click', () => {
-        const isVisible = chatbotWidget.style.display === 'flex';
-        if (isVisible) {
-            chatbotWidget.style.display = 'none';
-        } else {
-            chatbotWidget.style.display = 'flex';
-            loadHistory();
-            messageInput.focus();
-        }
-    });
-
+    if (toggleButton) {
+        console.log("Adding click listener to toggle button");
+        console.log("Initial widget display:", chatbotWidget ? chatbotWidget.style.display : 'widget not found');
+        
+        toggleButton.addEventListener('click', () => {
+            console.log("Toggle button clicked");
+            if (!chatbotWidget) {
+                console.error("Widget not found on click");
+                return;
+            }
+            
+            const isVisible = chatbotWidget.style.display === 'flex';
+            console.log("Is visible:", isVisible);
+            
+            if (isVisible) {
+                chatbotWidget.style.display = 'none';
+                console.log("Setting display to none");
+            } else {
+                chatbotWidget.style.display = 'flex';
+                console.log("Setting display to flex");
+                
+                loadHistory();
+                messageInput.focus();
+            }
+        });
+    }
 
     closeButton.addEventListener('click', () => {
         chatbotWidget.style.display = 'none';
@@ -264,21 +284,34 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const voiceButton = document.getElementById('chatbot-voice-button');
-
-    voiceButton.addEventListener('click', function () {
-        fetch('/chatbot/voice-input/')
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    messageInput.value = data.text;
-                } else {
-                    alert('Не удалось распознать голос. Попробуйте снова.');
-                }
-            })
-            .catch(error => {
-                console.error('Ошибка при обработке голосового ввода:', error);
-                alert('Ошибка при обработке голосового ввода.');
-            });
-    });
-
+    if (voiceButton) {
+        voiceButton.addEventListener('click', function () {
+            voiceButton.disabled = true;
+            voiceButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            
+            fetch('/chatbot/voice-input/')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Network response was not ok: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        messageInput.value = data.text;
+                        messageInput.focus();
+                    } else {
+                        alert(data.error || 'Не удалось распознать голос. Попробуйте снова.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Ошибка при обработке голосового ввода:', error);
+                    alert('Ошибка при обработке голосового ввода: ' + error.message);
+                })
+                .finally(() => {
+                    voiceButton.disabled = false;
+                    voiceButton.innerHTML = '<i class="fas fa-microphone"></i>';
+                });
+        });
+    }
 });

@@ -1,21 +1,171 @@
 {% extends 'base.html' %}
 
-{% block title %}Профильді өзгерту{% endblock %}
+{% block title %}Профильді өзгерту | Dongelek{% endblock %}
 
 {% block content %}
-     <main class="content-container">
-<h2>Профильді өзгерту</h2>
-<p>Ағымдағы аватар:</p>
-{% if user.avatar %}
-    <img src="{{ user.avatar.url }}" alt="{{ user.username }} avatar" style="max-width: 150px; height: auto; border-radius: 50%; margin-bottom: 15px;">
-{% else %}
-    <p>Аватар жүктелмеген.</p>
-{% endif %}
+<section class="auth-section">
+    <div class="auth-container">
+        <div class="auth-header">
+            <h1 class="auth-title">Профильді өзгерту</h1>
+            <p class="auth-subtitle">Жеке деректеріңізді жаңартыңыз</p>
+        </div>
+        
+        <div class="profile-avatar">
+            {% if user.avatar %}
+                <img src="{{ user.avatar.url }}" alt="{{ user.username }}" class="avatar-preview">
+            {% else %}
+                <div class="avatar-placeholder">
+                    <i class="fas fa-user"></i>
+                </div>
+            {% endif %}
+        </div>
+        
+        <form method="post" enctype="multipart/form-data" class="auth-form">
+            {% csrf_token %}
+            
+            {% for field in form %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                    
+                    {% if field.name == 'avatar' %}
+                        <div class="file-upload-container">
+                            <label for="{{ field.id_for_label }}" class="file-upload-label">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <span>Жаңа аватар таңдау</span>
+                            </label>
+                            {{ field }}
+                            <span class="file-name">Файл таңдалмаған</span>
+                        </div>
+                    {% else %}
+                        {{ field }}
+                    {% endif %}
+                    
+                    {% if field.errors %}
+                        <div class="field-errors">
+                            {% for error in field.errors %}
+                                <p class="error-message">{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    
+                    {% if field.help_text %}
+                        <p class="help-text">{{ field.help_text|safe }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-block">
+                    <i class="fas fa-save"></i> Сақтау
+                </button>
+            </div>
+        </form>
+        
+        <div class="auth-links">
+            <a href="{% url 'index' %}" class="auth-link">
+                <i class="fas fa-arrow-left"></i> Басты бетке оралу
+            </a>
+        </div>
+    </div>
+</section>
 
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="button-link">Сақтау</button>
-</form>
-    </main>
+<style>
+    .profile-avatar {
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+    
+    .avatar-preview {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #2563eb;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    .avatar-placeholder {
+        width: 120px;
+        height: 120px;
+        margin: 0 auto;
+        background-color: #e2e8f0;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        color: #94a3b8;
+    }
+    
+    .file-upload-container {
+        margin-top: 0.5rem;
+    }
+    
+    .file-upload-label {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        background-color: #f1f5f9;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 0.875rem;
+        color: #334155;
+    }
+    
+    .file-upload-label:hover {
+        background-color: #e2e8f0;
+    }
+    
+    .file-upload-label i {
+        margin-right: 0.5rem;
+    }
+    
+    input[type="file"] {
+        position: absolute;
+        width: 0.1px;
+        height: 0.1px;
+        opacity: 0;
+        overflow: hidden;
+        z-index: -1;
+    }
+    
+    .file-name {
+        display: inline-block;
+        margin-left: 0.75rem;
+        font-size: 0.875rem;
+        color: #64748b;
+    }
+    
+    .field-errors {
+        margin-top: 0.5rem;
+    }
+    
+    .error-message {
+        color: #ef4444;
+        font-size: 0.875rem;
+        margin-bottom: 0.25rem;
+    }
+    
+    .help-text {
+        margin-top: 0.25rem;
+        font-size: 0.75rem;
+        color: #64748b;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const fileInput = document.querySelector('input[type="file"]');
+        const fileName = document.querySelector('.file-name');
+        
+        fileInput.addEventListener('change', function() {
+            if (this.files && this.files.length > 0) {
+                fileName.textContent = this.files[0].name;
+            } else {
+                fileName.textContent = 'Файл таңдалмаған';
+            }
+        });
+    });
+</script>
 {% endblock %}

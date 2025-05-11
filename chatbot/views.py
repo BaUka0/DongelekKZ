@@ -82,6 +82,8 @@ def clear_history(request):
         print(f"Ошибка очистки истории чата для {request.user}: {e}")
         return HttpResponseServerError(json.dumps({"error": "Не удалось очистить историю."}), content_type='application/json')
 
+
+@login_required
 def voice_input(request):
      recognizer = sr.Recognizer()
      with sr.Microphone() as source:

@@ -1,26 +1,110 @@
 {% extends 'base.html' %}
 
-{% block title %}Подтверждение входа{% endblock %}
+{% block title %}Dongelek - Кіруді растау{% endblock %}
 
 {% block content %}
-<main class="content-container">
-    <h2>Подтверждение входа</h2>
-    <p>Введите код, отправленный на вашу почту.</p>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="button-link">Подтвердить</button>
-    </form>
-    <form method="post" action="{% url 'resend_otp' %}">
-        {% csrf_token %}
-        <button type="submit" class="button-link">Переотправить код</button>
-    </form>
-    {% if messages %}
-    <ul class="messages">
-        {% for message in messages %}
-            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-</main>
+<section class="auth-section">
+    <div class="auth-container">
+        <div class="auth-header">
+            <h1 class="auth-title">Кіруді растау</h1>
+            <p class="auth-subtitle">Электрондық поштаңызға жіберілген кодты енгізіңіз</p>
+        </div>
+        
+        {% if messages %}
+            {% for message in messages %}
+                <div class="auth-message {% if message.tags %}auth-message-{{ message.tags }}{% endif %}">
+                    <i class="fas {% if message.tags == 'success' %}fa-check-circle{% elif message.tags == 'error' %}fa-exclamation-circle{% else %}fa-info-circle{% endif %}"></i>
+                    <span>{{ message }}</span>
+                </div>
+            {% endfor %}
+        {% endif %}
+        
+        <div class="otp-info">
+            <div class="otp-icon">
+                <i class="fas fa-envelope"></i>
+            </div>
+            <p>Растау коды электрондық поштаңызға жіберілді. Оны 5 минут ішінде енгізіңіз.</p>
+        </div>
+        
+        <form method="post" class="auth-form">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="{{ form.code.id_for_label }}" class="form-label">{{ form.code.label }}</label>
+                <div class="form-input-group">
+                    <div class="input-icon">
+                        <i class="fas fa-key"></i>
+                    </div>
+                    {{ form.code }}
+                </div>
+                {% if form.code.errors %}
+                    <div class="field-errors">
+                        {% for error in form.code.errors %}
+                            <p class="error-message">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-block">
+                    <i class="fas fa-check"></i> Растау
+                </button>
+            </div>
+        </form>
+        
+        <div class="auth-links">
+            <span>Код келмеді ме?</span>
+            <form method="post" action="{% url 'resend_otp' %}" class="resend-form">
+                {% csrf_token %}
+                <button type="submit" class="resend-button">
+                    <i class="fas fa-sync-alt"></i> Кодты қайта жіберу
+                </button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* Add improved message styles for better dark mode readability */
+    .auth-message {
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        margin-bottom: 1.5rem;
+        display: flex;
+        align-items: flex-start;
+    }
+    
+    .auth-message i {
+        margin-right: 0.75rem;
+        font-size: 1.25rem;
+        margin-top: 0.125rem;
+    }
+    
+    .auth-message-success {
+        background-color: #ecfdf5;
+        color: #065f46;
+        border-left: 4px solid #10b981;
+    }
+    
+    .auth-message-error {
+        background-color: #fee2e2;
+        color: #b91c1c;
+        border-left: 4px solid #ef4444;
+    }
+    
+    .auth-message-warning {
+        background-color: #fffbeb;
+        color: #92400e;
+        border-left: 4px solid #f59e0b;
+    }
+    
+    .auth-message-info {
+        background-color: #dbeafe;
+        color: #1e40af;
+        border-left: 4px solid #3b82f6;
+    }
+    
+    /* Dark mode variants will be handled by the main CSS */
+</style>
 {% endblock %}

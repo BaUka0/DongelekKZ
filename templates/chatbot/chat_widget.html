@@ -1,33 +1,42 @@
 {% load static %}
-<div class="chatbot-widget-container" id="chatbot-widget" style="display: none;">
-    <div class="chat-container chatbot-instance">
-        <div class="chat-header chatbot-header">
-            <span><i class="fa-solid fa-robot"></i> AI chat-bot</span>
-            <button class="chatbot-close-button" id="chatbot-close-button" title="Закрыть чат">
-                <i class="fa-solid fa-times"></i>
+<div class="chatbot" id="chatbot-widget" style="display: none;">
+    <div class="chatbot-container">
+        <div class="chatbot-header">
+            <div class="chatbot-title">
+                <i class="fas fa-robot"></i>
+                <span>Dongelek Assistant</span>
+            </div>
+            <button class="chatbot-close" id="chatbot-close-button" title="Чатты жабу">
+                <i class="fas fa-times"></i>
             </button>
         </div>
-        <div class="chat-history chatbot-history" id="chatbot-history">
+        
+        <div class="chatbot-messages" id="chatbot-history">
             <div id="chatbot-anchor"></div>
         </div>
-        <div class="chat-input-area chatbot-input-area">
-            <form id="chatbot-form" class="chatbot-form" action="javascript:void(0);">
-                <input type="text" id="chatbot-message-input" placeholder="Enter message..." autocomplete="off" required>
-                <button type="button" id="chatbot-voice-button" title="Голосовой ввод">
-                    <i class="fa-solid fa-microphone"></i>
-                </button>
-                <button type="submit" id="chatbot-send-button" title="Отправить">
-                    <i class="fa-solid fa-paper-plane"></i>
-                </button>
+        
+        <div class="chatbot-input">
+            <form id="chatbot-form" class="chatbot-form">
+                <div class="chatbot-input-container">
+                    <input type="text" id="chatbot-message-input" placeholder="Хабарламаңызды жазыңыз..." autocomplete="off" required>
+                    <button type="button" id="chatbot-voice-button" title="Дауыстық енгізу">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <button type="submit" id="chatbot-send-button" title="Жіберу">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
             </form>
         </div>
-        <div class="clear-button-container chatbot-clear-container">
-            <button type="button" id="chatbot-clear-button" title="Очистить историю">
-                <i class="fa-solid fa-trash"></i> Delete dialog
+        
+        <div class="chatbot-footer">
+            <button type="button" id="chatbot-clear-button" title="Чат тарихын өшіру">
+                <i class="fas fa-trash"></i> Тарихты өшіру
             </button>
         </div>
     </div>
 </div>
+
 <div id="chatbot-urls"
      data-load-history-url="{% url 'chatbot:load_history' %}"
      data-get-response-url="{% url 'chatbot:get_response' %}"

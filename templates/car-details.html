@@ -1,45 +1,246 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}{{ car.brand }} {{ car.model }} - Егжей-тегжейлі ақпарат{% endblock %}
+{% block title %}{{ car.brand }} {{ car.model }} - Толық ақпарат | Dongelek{% endblock %}
 
 {% block content %}
-<div class="car-details-container">
-    <h2 id="carModelHeading">{{ car.brand }} {{ car.model }}</h2>
-    <div class="car-image" style="text-align: center; margin-bottom: 20px;">
-         {% if car.image %}
-        <img id="carImage" src="{{ car.image.url }}" alt="{{ car.brand }} {{ car.model }} суреті" style="max-width: 100%; height: auto; max-height: 400px;">
-         {% else %}
-         <p>Сурет жоқ</p>
-         {% endif %}
-    </div>
-
-    <section class="detail-section">
-        <h3>Негізгі ақпарат</h3>
-        <div class="detail-item"><strong>Маркасы:</strong> <span id="carBrand">{{ car.brand }}</span></div>
-        <div class="detail-item"><strong>Моделі:</strong> <span id="carModel">{{ car.model }}</span></div>
-        <div class="detail-item"><strong>Жылы:</strong> <span id="carYear">{{ car.year }}</span></div>
-        <div class="detail-item"><strong>Жүрісі:</strong> <span id="carMileage">{{ car.mileage }} км</span></div>
-        <div class="detail-item"><strong>Бағасы:</strong> <span id="carPrice">${{ car.price }}</span></div>
-         <div class="detail-item"><strong>Сатушы:</strong> <span>{{ car.seller.username }}</span></div>
-    </section>
-
-    <section class="detail-section">
-        <h3>Сипаттама</h3>
-        <p id="carDescription">{{ car.description|linebreaksbr }}</p>
-    </section>
-
-            {% if user.is_authenticated %}
-                {% if car.seller == user or user.is_admin %}
-                <div style="margin-top: 20px;">
-                    <a href="{% url 'car_update' car.pk %}" class="button-link" style="background-color: #ffc107; color: black;">Өзгерту</a>
-                    <a href="{% url 'car_delete' car.pk %}" class="button-link" style="background-color: #dc3545;">Өшіру</a>
-                </div>
+<section class="car-details">
+    <div class="container">
+        <div class="car-details-header">
+            <div class="back-link">
+                <a href="{% url 'index' %}">
+                    <i class="fas fa-arrow-left"></i> Барлық көліктерге
+                </a>
+            </div>
+            <h1 class="car-details-title">{{ car.brand }} {{ car.model }}</h1>
+        </div>
+        
+        <div class="car-details-container">
+            <div class="car-gallery">
+                {% if car.image %}
+                    <div class="car-main-image">
+                        <img src="{{ car.image.url }}" alt="{{ car.brand }} {{ car.model }} суреті" id="carImage">
+                    </div>
+                {% else %}
+                    <div class="car-main-image no-image">
+                        <i class="fas fa-car"></i>
+                        <p>Сурет жоқ</p>
+                    </div>
                 {% endif %}
-            {% endif %}
-
-    <div class="back-button" style="margin-top: 20px;">
-        <a href="{% url 'index' %}" class="button-link" style="background-color: #6c757d;">Басты бетке қайту</a>
+            </div>
+            
+            <div class="car-info">
+                <div class="car-info-header">
+                    <div class="car-price-tag">${{ car.price }}</div>
+                    {% if user.is_authenticated %}
+                        {% if car.seller == user or user.is_admin %}
+                            <div class="car-admin-actions">
+                                <a href="{% url 'car_update' car.pk %}" class="btn btn-warning">
+                                    <i class="fas fa-edit"></i> Өзгерту
+                                </a>
+                                <a href="{% url 'car_delete' car.pk %}" class="btn btn-danger">
+                                    <i class="fas fa-trash"></i> Жою
+                                </a>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                </div>
+                
+                <div class="info-block">
+                    <h3 class="info-block-title">Негізгі ақпарат</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">Маркасы</div>
+                            <div class="info-value" id="carBrand">{{ car.brand }}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Моделі</div>
+                            <div class="info-value" id="carModel">{{ car.model }}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Жылы</div>
+                            <div class="info-value" id="carYear">{{ car.year }}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Жүрісі</div>
+                            <div class="info-value" id="carMileage">{{ car.mileage }} км</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Сатушы</div>
+                            <div class="info-value seller-info">
+                                {% if car.seller.avatar %}
+                                    <img src="{{ car.seller.avatar.url }}" alt="{{ car.seller.username }}" class="seller-avatar">
+                                {% endif %}
+                                <span>{{ car.seller.username }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="info-block">
+                    <h3 class="info-block-title">Сипаттама</h3>
+                    <div class="car-description" id="carDescription">
+                        {{ car.description|linebreaksbr }}
+                    </div>
+                </div>
+                
+                <div class="info-block">
+                    <h3 class="info-block-title">Байланыс</h3>
+                    <div class="contact-info">
+                        <button class="btn btn-primary btn-lg btn-block">
+                            <i class="fas fa-phone"></i> Сатушыға қоңырау шалу
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+</section>
+
+<style>
+    .car-details-header {
+        margin-bottom: 2rem;
+    }
+    
+    .back-link {
+        margin-bottom: 0.75rem;
+    }
+    
+    .back-link a {
+        color: #64748b;
+        font-size: 0.95rem;
+        display: inline-flex;
+        align-items: center;
+        transition: color 0.3s ease;
+    }
+    
+    .back-link a i {
+        margin-right: 0.5rem;
+    }
+    
+    .back-link a:hover {
+        color: #2563eb;
+    }
+    
+    .car-details-title {
+        font-size: 2.25rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 0;
+    }
+    
+    .car-price-tag {
+        font-size: 2.25rem;
+        font-weight: 700;
+        color: #2563eb;
+    }
+    
+    .car-info-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+    
+    .car-admin-actions {
+        display: flex;
+        gap: 0.75rem;
+    }
+    
+    .info-block-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: #1e293b;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #e2e8f0;
+    }
+    
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+    
+    .info-item {
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 0.5rem;
+    }
+    
+    .info-label {
+        font-size: 0.875rem;
+        color: #64748b;
+        margin-bottom: 0.25rem;
+    }
+    
+    .info-value {
+        font-weight: 500;
+        color: #1e293b;
+        font-size: 1.05rem;
+    }
+    
+    .car-description {
+        line-height: 1.8;
+        color: #334155;
+        white-space: pre-line;
+    }
+    
+    .seller-info {
+        display: flex;
+        align-items: center;
+    }
+    
+    .seller-avatar {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        margin-right: 0.5rem;
+        object-fit: cover;
+    }
+    
+    .contact-info {
+        margin-top: 0.5rem;
+    }
+    
+    @media (max-width: 1024px) {
+        .car-details-container {
+            grid-template-columns: 1fr;
+        }
+        
+        .car-main-image {
+            height: 350px;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .car-info-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+        
+        .car-admin-actions {
+            width: 100%;
+        }
+        
+        .car-admin-actions .btn {
+            flex: 1;
+        }
+        
+        .car-details-title {
+            font-size: 1.75rem;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .info-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .car-main-image {
+            height: 250px;
+        }
+    }
+</style>
 {% endblock %}

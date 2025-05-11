@@ -1,39 +1,130 @@
 {% extends 'base.html' %}
 
-{% block title %}Кіру{% endblock %}
+{% block title %}Dongelek - Жүйеге кіру{% endblock %}
 
 {% block content %}
-     <main class="content-container">
-<h2>Кіру</h2>
-{% if form.errors %}
-    <p style="color: red;">Пайдаланушы аты немесе құпия сөз қате. Қайталап көріңіз.</p>
-{% endif %}
+<section class="auth-section">
+    <div class="auth-container">
+        <div class="auth-header">
+            <h1 class="auth-title">Жүйеге кіру</h1>
+            <p class="auth-subtitle">Тіркелген деректеріңізді енгізіңіз</p>
+        </div>
+        
+        {% if form.errors %}
+            <div class="auth-error">
+                <i class="fas fa-exclamation-circle"></i>
+                <span>Пайдаланушы аты немесе құпия сөз қате. Қайталап көріңіз.</span>
+            </div>
+        {% endif %}
 
-{% if next %}
-    {% if user.is_authenticated %}
-    <p>Сіздің аккаунтыңыздың бұл бетке кіруге рұқсаты жоқ. Жалғастыру үшін басқа аккаунтпен кіріңіз.</p>
-    {% else %}
-    <p>Бұл бетті көру үшін жүйеге кіріңіз.</p>
-    {% endif %}
-{% endif %}
+        {% if next %}
+            {% if user.is_authenticated %}
+                <div class="auth-message">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Сіздің аккаунтыңыздың бұл бетке кіруге рұқсаты жоқ. Жалғастыру үшін басқа аккаунтпен кіріңіз.</span>
+                </div>
+            {% else %}
+                <div class="auth-message">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Бұл бетті көру үшін жүйеге кіріңіз.</span>
+                </div>
+            {% endif %}
+        {% endif %}
 
-<form method="post" action="{% url 'login' %}">
-    {% csrf_token %}
-    <table>
-    <tr>
-        <td>{{ form.username.label_tag }}</td>
-        <td>{{ form.username }}</td>
-    </tr>
-    <tr>
-        <td>{{ form.password.label_tag }}</td>
-        <td>{{ form.password }}</td>
-    </tr>
-    </table>
-    <button type="submit" class="button-link">Кіру</button>
-    <input type="hidden" name="next" value="{{ next }}"> 
-</form>
+        <form method="post" action="{% url 'login' %}" class="auth-form">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="id_username" class="form-label">Пайдаланушы аты</label>
+                <div class="form-input-group">
+                    <div class="input-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    {{ form.username }}
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="id_password" class="form-label">Құпия сөз</label>
+                <div class="form-input-group">
+                    <div class="input-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    {{ form.password }}
+                </div>
+            </div>
+            
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-block">
+                    <i class="fas fa-sign-in-alt"></i> Кіру
+                </button>
+                <input type="hidden" name="next" value="{{ next }}">
+            </div>
+        </form>
+        
+        <div class="auth-links">
+            <a href="{% url 'password_reset' %}" class="auth-link">
+                <i class="fas fa-key"></i> Құпия сөзді ұмыттыңыз ба?
+            </a>
+            <span class="auth-separator">•</span>
+            <a href="{% url 'signup' %}" class="auth-link">
+                <i class="fas fa-user-plus"></i> Тіркелу
+            </a>
+        </div>
+    </div>
+</section>
 
-<p><a href="{% url 'password_reset' %}">Құпия сөзді ұмыттыңыз ба?</a></p>
-<p>Аккаунтыңыз жоқ па? <a href="{% url 'signup' %}">Тіркелу</a></p>
-      </main>
+<style>
+    .auth-error, .auth-message {
+        margin-bottom: 1.5rem;
+        padding: 0.875rem 1rem;
+        border-radius: 0.5rem;
+        display: flex;
+        align-items: flex-start;
+    }
+    
+    .auth-error {
+        background-color: #fee2e2;
+        color: #b91c1c;
+        border-left: 4px solid #ef4444;
+    }
+    
+    .auth-message {
+        background-color: #e0f2fe;
+        color: #0369a1;
+        border-left: 4px solid #3b82f6;
+    }
+    
+    .auth-error i, .auth-message i {
+        margin-right: 0.75rem;
+        font-size: 1.25rem;
+        margin-top: 0.125rem;
+    }
+    
+    .auth-links {
+        text-align: center;
+        margin-top: 1.5rem;
+        font-size: 0.875rem;
+        color: #64748b;
+    }
+    
+    .auth-link {
+        color: #2563eb;
+        transition: color 0.3s ease;
+    }
+    
+    .auth-link:hover {
+        color: #1d4ed8;
+        text-decoration: underline;
+    }
+    
+    .auth-separator {
+        margin: 0 0.75rem;
+        color: #94a3b8;
+    }
+    
+    #id_username, #id_password {
+        padding-left: 2.5rem;
+    }
+</style>
 {% endblock %}

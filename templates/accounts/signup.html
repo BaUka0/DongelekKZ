@@ -1,15 +1,153 @@
 {% extends 'base.html' %}
 
-{% block title %}Тіркелу{% endblock %}
+{% block title %}Dongelek - Тіркелу{% endblock %}
 
 {% block content %}
-<main class="content-container">
-    <h2>Жаңа аккаунт құру</h2>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="button-link">Тіркелу</button>
-    </form>
-    <p>Аккаунтыңыз бар ма? <a href="{% url 'login' %}">Кіру</a></p>
-</main>
+<section class="auth-section">
+    <div class="auth-container">
+        <div class="auth-header">
+            <h1 class="auth-title">Жаңа аккаунт құру</h1>
+            <p class="auth-subtitle">Dongelek-ке тіркеліп, жариялаулар жасаңыз</p>
+        </div>
+        
+        <form method="post" enctype="multipart/form-data" class="auth-form">
+            {% csrf_token %}
+            
+            {% for field in form %}
+                {% if field.errors %}
+                    <div class="auth-error">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <div>
+                            {% for error in field.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+                
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                    
+                    {% if field.name == 'username' %}
+                        <div class="form-input-group">
+                            <div class="input-icon">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            {{ field }}
+                        </div>
+                    {% elif field.name == 'email' %}
+                        <div class="form-input-group">
+                            <div class="input-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            {{ field }}
+                        </div>
+                    {% elif 'password' in field.name %}
+                        <div class="form-input-group">
+                            <div class="input-icon">
+                                <i class="fas fa-lock"></i>
+                            </div>
+                            {{ field }}
+                        </div>
+                    {% elif field.name == 'avatar' %}
+                        <div class="file-upload-container">
+                            <label for="{{ field.id_for_label }}" class="file-upload-label">
+                                <i class="fas fa-image"></i>
+                                <span>Аватар таңдау</span>
+                            </label>
+                            {{ field }}
+                            <span class="file-name">Файл таңдалмаған</span>
+                        </div>
+                    {% elif field.name == 'bio' %}
+                        {{ field }}
+                    {% else %}
+                        {{ field }}
+                    {% endif %}
+                    
+                    {% if field.help_text %}
+                        <p class="help-text">{{ field.help_text|safe }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-block">
+                    <i class="fas fa-user-plus"></i> Тіркелу
+                </button>
+            </div>
+        </form>
+        
+        <div class="auth-links">
+            <span>Аккаунтыңыз бар ма?</span>
+            <a href="{% url 'login' %}" class="auth-link">
+                <i class="fas fa-sign-in-alt"></i> Кіру
+            </a>
+        </div>
+    </div>
+</section>
+
+<style>
+    .file-upload-container {
+        margin-top: 0.5rem;
+    }
+    
+    .file-upload-label {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        background-color: #f1f5f9;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 0.875rem;
+        color: #334155;
+    }
+    
+    .file-upload-label:hover {
+        background-color: #e2e8f0;
+    }
+    
+    .file-upload-label i {
+        margin-right: 0.5rem;
+    }
+    
+    input[type="file"] {
+        position: absolute;
+        width: 0.1px;
+        height: 0.1px;
+        opacity: 0;
+        overflow: hidden;
+        z-index: -1;
+    }
+    
+    .file-name {
+        display: inline-block;
+        margin-left: 0.75rem;
+        font-size: 0.875rem;
+        color: #64748b;
+    }
+    
+    .help-text {
+        margin-top: 0.25rem;
+        font-size: 0.75rem;
+        color: #64748b;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const fileInput = document.querySelector('input[type="file"]');
+        const fileName = document.querySelector('.file-name');
+        
+        if (fileInput) {
+            fileInput.addEventListener('change', function() {
+                if (this.files && this.files.length > 0) {
+                    fileName.textContent = this.files[0].name;
+                } else {
+                    fileName.textContent = 'Файл таңдалмаған';
+                }
+            });
+        }
+    });
+</script>
 {% endblock %}

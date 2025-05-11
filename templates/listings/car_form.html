@@ -1,15 +1,433 @@
 {% extends 'base.html' %}
 
-{% block title %}{% if object %}Өзгерту: {{ object }}{% else %}Жаңа жариялау{% endif %}{% endblock %}
+{% block title %}{% if object %}{{ object }} - Өзгерту{% else %}Жаңа жариялау{% endif %} | Dongelek{% endblock %}
 
 {% block content %}
-     <main class="content-container">
-<h2>{% if object %}Жариялауды өзгерту{% else %}Жаңа жариялау қосу{% endif %}</h2>
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="button-link">{% if object %}Сақтау{% else %}Қосу{% endif %}</button>
-     <a href="{% if object %}{{ object.get_absolute_url }}{% else %}{% url 'index' %}{% endif %}" class="button-link" style="background-color: #6c757d; margin-left: 10px;">Бас тарту</a>
-</form>
-     </main>
+<section class="form-section">
+    <div class="container">
+        <div class="form-header">
+            <h1 class="form-title">
+                {% if object %}
+                    <i class="fas fa-edit"></i> Жариялауды өзгерту
+                {% else %}
+                    <i class="fas fa-plus-circle"></i> Жаңа жариялау қосу
+                {% endif %}
+            </h1>
+            <div class="form-actions">
+                <a href="{% if object %}{{ object.get_absolute_url }}{% else %}{% url 'index' %}{% endif %}" class="btn btn-outline">
+                    <i class="fas fa-arrow-left"></i> Артқа қайту
+                </a>
+            </div>
+        </div>
+        
+        <div class="form-container">
+            <form method="post" enctype="multipart/form-data" class="car-form">
+                {% csrf_token %}
+                
+                {% if form.non_field_errors %}
+                    <div class="form-errors">
+                        {% for error in form.non_field_errors %}
+                            <p class="error-message">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                
+                <div class="form-grid">
+                    <div class="form-section-title">Көлік туралы негізгі ақпарат</div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="{{ form.brand.id_for_label }}" class="form-label">{{ form.brand.label }}</label>
+                            {{ form.brand }}
+                            {% if form.brand.errors %}
+                                <div class="field-errors">
+                                    {% for error in form.brand.errors %}
+                                        <p class="error-message">{{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="{{ form.model.id_for_label }}" class="form-label">{{ form.model.label }}</label>
+                            {{ form.model }}
+                            {% if form.model.errors %}
+                                <div class="field-errors">
+                                    {% for error in form.model.errors %}
+                                        <p class="error-message">{{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="{{ form.year.id_for_label }}" class="form-label">{{ form.year.label }}</label>
+                            {{ form.year }}
+                            {% if form.year.errors %}
+                                <div class="field-errors">
+                                    {% for error in form.year.errors %}
+                                        <p class="error-message">{{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="{{ form.mileage.id_for_label }}" class="form-label">{{ form.mileage.label }}</label>
+                            {{ form.mileage }}
+                            {% if form.mileage.errors %}
+                                <div class="field-errors">
+                                    {% for error in form.mileage.errors %}
+                                        <p class="error-message">{{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="{{ form.price.id_for_label }}" class="form-label">{{ form.price.label }}</label>
+                            {{ form.price }}
+                            {% if form.price.errors %}
+                                <div class="field-errors">
+                                    {% for error in form.price.errors %}
+                                        <p class="error-message">{{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="form-section-title">Көлік суреті</div>
+                    
+                    <div class="form-group">
+                        <label for="{{ form.image.id_for_label }}" class="form-label">{{ form.image.label }}</label>
+                        
+                        <div class="image-upload-container">
+                            {% if object and object.image %}
+                                <div class="image-preview">
+                                    <img src="{{ object.image.url }}" alt="{{ object }}" id="image-preview">
+                                </div>
+                            {% else %}
+                                <div class="image-preview empty">
+                                    <div class="placeholder">
+                                        <i class="fas fa-image"></i>
+                                        <span>Сурет жоқ</span>
+                                    </div>
+                                    <img src="" alt="" id="image-preview" style="display: none;">
+                                </div>
+                            {% endif %}
+                            
+                            <div class="image-upload">
+                                <label for="{{ form.image.id_for_label }}" class="upload-button">
+                                    <i class="fas fa-upload"></i> Сурет таңдау
+                                </label>
+                                {{ form.image }}
+                                <span class="file-name">{% if object and object.image %}{{ object.image.name }}{% else %}Файл таңдалмаған{% endif %}</span>
+                            </div>
+                        </div>
+                        
+                        {% if form.image.errors %}
+                            <div class="field-errors">
+                                {% for error in form.image.errors %}
+                                    <p class="error-message">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="form-section-title">Көлік сипаттамасы</div>
+                    
+                    <div class="form-group">
+                        <label for="{{ form.description.id_for_label }}" class="form-label">{{ form.description.label }}</label>
+                        {{ form.description }}
+                        {% if form.description.errors %}
+                            <div class="field-errors">
+                                {% for error in form.description.errors %}
+                                    <p class="error-message">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="form-submit">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="fas {% if object %}fa-save{% else %}fa-plus{% endif %}"></i>
+                        {% if object %}Сақтау{% else %}Жариялау{% endif %}
+                    </button>
+                    <a href="{% if object %}{{ object.get_absolute_url }}{% else %}{% url 'index' %}{% endif %}" class="btn btn-outline btn-lg">
+                        <i class="fas fa-times"></i> Бас тарту
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<style>
+    .form-section {
+        padding: 3rem 0;
+    }
+    
+    .form-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+    
+    .form-title {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #1e293b;
+    }
+    
+    .form-title i {
+        color: #2563eb;
+        margin-right: 0.5rem;
+    }
+    
+    .form-container {
+        background-color: #ffffff;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+    }
+    
+    .form-grid {
+        display: grid;
+        gap: 1.5rem;
+    }
+    
+    .form-section-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #1e293b;
+        margin-top: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #e2e8f0;
+    }
+    
+    .form-row {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+    
+    .form-group {
+        margin-bottom: 1rem;
+    }
+    
+    .form-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: #334155;
+        font-size: 0.875rem;
+    }
+    
+    .form-errors {
+        background-color: #fee2e2;
+        border-left: 4px solid #ef4444;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .error-message {
+        color: #b91c1c;
+        font-size: 0.875rem;
+        margin-bottom: 0.25rem;
+    }
+    
+    .field-errors {
+        margin-top: 0.5rem;
+    }
+    
+    .image-upload-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+        align-items: center;
+    }
+    
+    .image-preview {
+        width: 100%;
+        height: 200px;
+        border-radius: 0.5rem;
+        overflow: hidden;
+        background-color: #f1f5f9;
+        border: 1px dashed #cbd5e1;
+    }
+    
+    .image-preview img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .image-preview.empty {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .placeholder {
+        text-align: center;
+        color: #94a3b8;
+    }
+    
+    .placeholder i {
+        font-size: 3rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .image-upload {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .upload-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.75rem 1rem;
+        background-color: #f1f5f9;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 0.875rem;
+        color: #334155;
+        text-align: center;
+        margin-bottom: 0.5rem;
+    }
+    
+    .upload-button:hover {
+        background-color: #e2e8f0;
+    }
+    
+    .upload-button i {
+        margin-right: 0.5rem;
+    }
+    
+    input[type="file"] {
+        position: absolute;
+        width: 0.1px;
+        height: 0.1px;
+        opacity: 0;
+        overflow: hidden;
+        z-index: -1;
+    }
+    
+    .file-name {
+        font-size: 0.875rem;
+        color: #64748b;
+        word-break: break-all;
+    }
+    
+    .form-submit {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+    
+    @media (max-width: 768px) {
+        .image-upload-container {
+            grid-template-columns: 1fr;
+        }
+        
+        .form-submit {
+            flex-direction: column;
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const fileInput = document.querySelector('input[type="file"]');
+        const fileName = document.querySelector('.file-name');
+        const imagePreview = document.getElementById('image-preview');
+        const placeholder = document.querySelector('.placeholder');
+        
+        // Check for dark mode and adjust styling
+        const currentTheme = localStorage.getItem('theme');
+        if (currentTheme === 'dark') {
+            document.querySelectorAll('.form-container, .image-preview, .upload-button').forEach(el => {
+                // Apply dark mode styling
+                if (el.classList.contains('image-preview')) {
+                    el.style.borderColor = '#334155';
+                    el.style.backgroundColor = '#1e293b';
+                }
+                if (el.classList.contains('upload-button')) {
+                    el.style.backgroundColor = '#334155';
+                    el.style.color = '#e2e8f0';
+                }
+            });
+            
+            document.querySelectorAll('.form-section-title').forEach(el => {
+                el.style.borderBottomColor = '#334155';
+                el.style.color = '#f1f5f9';
+            });
+            
+            if (placeholder) {
+                placeholder.style.color = '#64748b';
+            }
+        }
+        
+        // Listen for theme changes
+        window.addEventListener('storage', function(e) {
+            if (e.key === 'theme') {
+                const isDarkMode = e.newValue === 'dark';
+                document.querySelectorAll('.form-container, .image-preview, .upload-button').forEach(el => {
+                    if (el.classList.contains('image-preview')) {
+                        el.style.borderColor = isDarkMode ? '#334155' : '#cbd5e1';
+                        el.style.backgroundColor = isDarkMode ? '#1e293b' : '#f1f5f9';
+                    }
+                    if (el.classList.contains('upload-button')) {
+                        el.style.backgroundColor = isDarkMode ? '#334155' : '#f1f5f9';
+                        el.style.color = isDarkMode ? '#e2e8f0' : '#334155';
+                    }
+                });
+                
+                document.querySelectorAll('.form-section-title').forEach(el => {
+                    el.style.borderBottomColor = isDarkMode ? '#334155' : '#e2e8f0';
+                    el.style.color = isDarkMode ? '#f1f5f9' : '#1e293b';
+                });
+                
+                if (placeholder) {
+                    placeholder.style.color = isDarkMode ? '#64748b' : '#94a3b8';
+                }
+            }
+        });
+        
+        if (fileInput) {
+            fileInput.addEventListener('change', function() {
+                if (this.files && this.files.length > 0) {
+                    const file = this.files[0];
+                    fileName.textContent = file.name;
+                    
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        imagePreview.src = e.target.result;
+                        imagePreview.style.display = 'block';
+                        if (placeholder) {
+                            placeholder.style.display = 'none';
+                        }
+                    }
+                    reader.readAsDataURL(file);
+                } else {
+                    fileName.textContent = 'Файл таңдалмаған';
+                    imagePreview.style.display = 'none';
+                    if (placeholder) {
+                        placeholder.style.display = 'flex';
+                    }
+                }
+            });
+        }
+    });
+</script>
 {% endblock %}

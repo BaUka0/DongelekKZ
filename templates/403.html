@@ -1,9 +1,123 @@
-{% block title %}Рұқсат жоқ (403){% endblock %}
+{% extends 'base.html' %}
+
+{% block title %}Рұқсат жоқ (403) | Dongelek{% endblock %}
 
 {% block content %}
-     <main class="content-container">
-<h2>Рұқсат жоқ (403)</h2>
-<p>Кешіріңіз, сіздің бұл бетке кіруге рұқсатыңыз жоқ.</p>
-<p><a href="{% url 'index' %}">Басты бетке оралу</a></p>
-     </main>
+<section class="error-section">
+    <div class="container">
+        <div class="error-container">
+            <div class="error-code">403</div>
+            
+            <div class="error-icon">
+                <i class="fas fa-ban"></i>
+            </div>
+            
+            <h1 class="error-title">Рұқсат жоқ</h1>
+            
+            <p class="error-message">Кешіріңіз, сіздің бұл бетке кіруге рұқсатыңыз жоқ.</p>
+            
+            <div class="error-actions">
+                <a href="{% url 'index' %}" class="btn btn-primary">
+                    <i class="fas fa-home"></i> Басты бетке оралу
+                </a>
+                <a href="javascript:history.back()" class="btn btn-outline">
+                    <i class="fas fa-arrow-left"></i> Артқа қайту
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .error-section {
+        padding: 3rem 0;
+        text-align: center;
+        min-height: 70vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .error-container {
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: #ffffff;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        padding: 3rem 2rem;
+        position: relative;
+    }
+    
+    .error-code {
+        position: absolute;
+        top: -30px;
+        right: -30px;
+        background-color: #ef4444;
+        color: white;
+        font-size: 1.5rem;
+        font-weight: 700;
+        width: 70px;
+        height: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    .error-icon {
+        font-size: 4rem;
+        color: #ef4444;
+        margin-bottom: 1.5rem;
+    }
+    
+    .error-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 1rem;
+    }
+    
+    .error-message {
+        font-size: 1.1rem;
+        color: #64748b;
+        margin-bottom: 2rem;
+    }
+    
+    .error-actions {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+    }
+    
+    @media (max-width: 640px) {
+        .error-container {
+            padding: 2rem 1.5rem;
+        }
+        
+        .error-code {
+            top: -25px;
+            right: -25px;
+            width: 60px;
+            height: 60px;
+            font-size: 1.25rem;
+        }
+        
+        .error-icon {
+            font-size: 3rem;
+        }
+        
+        .error-title {
+            font-size: 1.75rem;
+        }
+        
+        .error-message {
+            font-size: 1rem;
+        }
+        
+        .error-actions {
+            flex-direction: column;
+        }
+    }
+</style>
 {% endblock %}
