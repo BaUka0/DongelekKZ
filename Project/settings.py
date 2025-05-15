@@ -17,9 +17,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 INTELLIGENCE_API_URL = "https://api.intelligence.io.solutions/api/v1/chat/completions"
-INTELLIGENCE_MODEL_NAME = "google/gemma-3-27b-it"
+INTELLIGENCE_MODEL_NAME = "meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8"
 IOINTELLIGENCE_API_KEY = "io-v2-eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJvd25lciI6IjZjMmEyZmQ3LTNmZDEtNGEwMS1iZmQxLWYyNWVkNWQwODVkZSIsImV4cCI6NDg5OTQwODA2MH0.KPnm4GlJtE_vzJgrVvMOTSo_RnQpsHyXdtjKYdumJ8x7C8AB1q7traBBOrZ7GWIb_hZV9QIeyIeV759b6S3TQg"
-CHATBOT_SYSTEM_PROMPT = "Сен пайдалы және сыпайы ЖИ ассистентсің. Пайдаланушыларға сайтта машина тандауға көмектесесің."
+CHATBOT_SYSTEM_PROMPT = "Сен пайдалы және сыпайы Dongelek ассистентісің. Пайдаланушыларға сайтта машина тандауға көмектесесің."
 CHATBOT_HISTORY_LENGTH = 10
 CHATBOT_MAX_TOKENS = 1024
 

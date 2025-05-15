@@ -3,7 +3,6 @@ from django.http import JsonResponse, HttpResponseBadRequest, HttpResponseServer
 from django.views.decorators.http import require_POST, require_GET
 from django.contrib.auth.decorators import login_required
 from django.utils import timezone
-import speech_recognition as sr
 
 from .models import ChatMessage
 from .utils import get_bot_response, handle_user_query_direct
@@ -81,24 +80,3 @@ def clear_history(request):
     except Exception as e:
         print(f"Ошибка очистки истории чата для {request.user}: {e}")
         return HttpResponseServerError(json.dumps({"error": "Не удалось очистить историю."}), content_type='application/json')
-
-
-@login_required
-def voice_input(request):
-     recognizer = sr.Recognizer()
-     with sr.Microphone() as source:
-         try:
-             print("Слушаю...")
-             audio = recognizer.listen(source, timeout=5)
-             text = recognizer.recognize_google(audio, language="ru-RU")
-             print(f"Распознанный текст: {text}")
-             return JsonResponse({"success": True, "text": text})
-         except sr.UnknownValueError:
-             print("Не удалось распознать голос")
-             return JsonResponse({"success": False, "error": "Не удалось распознать голос"})
-         except sr.RequestError as e:
-             print(f"Ошибка сервиса распознавания речи: {e}")
-             return JsonResponse({"success": False, "error": f"Ошибка сервиса распознавания речи: {e}"})
-         except Exception as e:
-             print(f"Неожиданная ошибка в voice_input: {e}")
-             return JsonResponse({"success": False, "error": f"Неожиданная ошибка распознавания: {e}"})

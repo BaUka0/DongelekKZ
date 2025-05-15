@@ -20,10 +20,9 @@ class ChatMessage(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True, db_index=True)
 
     class Meta:
-        ordering = ['timestamp'] # Сообщения упорядочены по времени
+        ordering = ['timestamp']
         verbose_name = "Сообщение чата"
         verbose_name_plural = "Сообщения чата"
-        # Индекс по пользователю и времени для более быстрой выборки истории
         indexes = [
             models.Index(fields=['user', 'timestamp']),
         ]

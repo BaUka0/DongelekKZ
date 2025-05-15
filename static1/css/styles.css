@@ -1266,8 +1266,8 @@ body.dark-mode .message-info .message-icon {
     position: fixed;
     bottom: 85px;
     right: 25px;
-    width: 350px;
-    height: 500px;
+    width: 450px; /* Increased from 350px */
+    height: 600px; /* Increased from 500px */
     background-color: #fff;
     border-radius: 12px;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
@@ -1307,6 +1307,7 @@ body.dark-mode .message-info .message-icon {
     display: flex;
     align-items: center;
     font-weight: 600;
+    font-size: 1.1rem; /* Slightly larger title */
 }
 
 .chatbot-title i {
@@ -1337,11 +1338,14 @@ body.dark-mode .message-info .message-icon {
 }
 
 .chatbot-messages .message {
-    max-width: 80%;
-    margin-bottom: 0.75rem;
-    padding: 0.75rem 1rem;
+    max-width: 85%;
+    margin-bottom: 1rem;
+    padding: 0.9rem 1rem;
     border-radius: 1rem;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    position: relative;
 }
 
 .chatbot-messages .message.user {
@@ -1359,24 +1363,34 @@ body.dark-mode .message-info .message-icon {
 }
 
 .chatbot-messages .sender {
-    font-size: 0.75rem;
-    margin-bottom: 0.25rem;
-    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: rgba(255, 255, 255, 0.95);
+    display: block;
+    width: 100%;
 }
 
 .chatbot-messages .message.bot .sender {
-    color: #64748b;
+    color: #475569;
 }
 
 .chatbot-messages .text-bubble {
     line-height: 1.5;
+    font-size: 1.05rem;
+    margin-bottom: 1rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    flex-grow: 1;
 }
 
 .chatbot-messages .timestamp {
     font-size: 0.75rem;
-    margin-top: 0.25rem;
     text-align: right;
     color: rgba(255, 255, 255, 0.7);
+    align-self: flex-end;
+    width: 100%;
+    margin-top: 0.5rem;
 }
 
 .chatbot-messages .message.bot .timestamp {
@@ -1415,8 +1429,8 @@ body.dark-mode .message-info .message-icon {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
+    width: 40px; /* Slightly larger buttons */
+    height: 40px; /* Slightly larger buttons */
     border-radius: 50%;
     border: none;
     cursor: pointer;
@@ -1492,6 +1506,34 @@ body.dark-mode .message-info .message-icon {
     }
     40% {
         transform: scale(1);
+    }
+}
+
+/* Responsive adjustments for chatbot */
+@media (max-width: 768px) {
+    .chatbot {
+        width: 90%; /* Use percentage width on smaller screens */
+        height: 550px; /* Slightly smaller height on mobile */
+        right: 5%;
+        left: 5%;
+    }
+}
+
+@media (max-width: 480px) {
+    .chatbot {
+        width: 95%;
+        height: 500px;
+        bottom: 75px;
+        right: 2.5%;
+        left: 2.5%;
+    }
+}
+
+/* Fix for content getting cut off on small screens */
+@media (max-height: 700px) {
+    .chatbot {
+        height: 450px; /* Even smaller height for very small screens */
+        bottom: 80px;
     }
 }
 

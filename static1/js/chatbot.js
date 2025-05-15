@@ -31,6 +31,19 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
 
+    // Check if Web Speech API is supported by the browser
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const SpeechGrammarList = window.SpeechGrammarList || window.webkitSpeechGrammarList;
+    const SpeechRecognitionEvent = window.SpeechRecognitionEvent || window.webkitSpeechRecognitionEvent;
+    
+    const isSpeechRecognitionSupported = Boolean(SpeechRecognition);
+    const voiceButton = document.getElementById('chatbot-voice-button');
+    
+    if (!isSpeechRecognitionSupported && voiceButton) {
+        voiceButton.style.display = 'none';
+        console.log("Web Speech API is not supported in this browser. Voice input disabled.");
+    }
+
     function scrollToBottom() {
         setTimeout(() => {
              if (chatHistory) {
@@ -191,7 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     chatForm.addEventListener('submit', async (event) => {
-        event.preventDefault(); // Предотвращаем стандартную отправку формы
+        event.preventDefault();
         const userMessage = messageInput.value.trim();
         if (!userMessage) return;
 
@@ -200,28 +213,24 @@ document.addEventListener('DOMContentLoaded', () => {
         showLoadingIndicator();
 
         try {
-            // Отправляем запрос на сервер
             const response = await fetch(GET_RESPONSE_URL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRFToken': CSRF_TOKEN, // Передаем CSRF токен
+                    'X-CSRFToken': CSRF_TOKEN,
                     'Accept': 'application/json',
                 },
                 body: JSON.stringify({ message: userMessage })
             });
 
-            // Скрываем индикатор как только получили ответ (до его обработки)
             hideLoadingIndicator();
 
             if (!response.ok) {
                 let errorMsg = `Ошибка сервера: ${response.status}`;
                 try {
-                    // Пытаемся извлечь сообщение об ошибке из JSON ответа
                     const errorData = await response.json();
                     errorMsg = `Ошибка: ${errorData.error || errorMsg}`;
                 } catch (e) {
-                     // Если ответ не JSON или пустой, используем статус код
                     console.warn("Could not parse error response as JSON:", e);
                  }
                 throw new Error(errorMsg);
@@ -283,35 +292,53 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    const voiceButton = document.getElementById('chatbot-voice-button');
-    if (voiceButton) {
-        voiceButton.addEventListener('click', function () {
-            voiceButton.disabled = true;
+    if (isSpeechRecognitionSupported && voiceButton) {
+        const recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.lang = 'kk-KZ'; // Set language to Russian
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
+        
+        let isRecording = false;
+        
+        recognition.onstart = () => {
+            isRecording = true;
             voiceButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-            
-            fetch('/chatbot/voice-input/')
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`Network response was not ok: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    if (data.success) {
-                        messageInput.value = data.text;
-                        messageInput.focus();
-                    } else {
-                        alert(data.error || 'Не удалось распознать голос. Попробуйте снова.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Ошибка при обработке голосового ввода:', error);
-                    alert('Ошибка при обработке голосового ввода: ' + error.message);
-                })
-                .finally(() => {
-                    voiceButton.disabled = false;
-                    voiceButton.innerHTML = '<i class="fas fa-microphone"></i>';
-                });
+            voiceButton.classList.add('recording');
+            console.log('Voice recognition started');
+        };
+        
+        recognition.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            console.log('Voice recognition result:', transcript);
+            messageInput.value = transcript;
+            messageInput.focus();
+        };
+        
+        recognition.onerror = (event) => {
+            console.error('Voice recognition error:', event.error);
+            if (event.error === 'no-speech') {
+                alert('Речь не распознана. Попробуйте снова.');
+            } else if (event.error === 'not-allowed') {
+                alert('Доступ к микрофону запрещен. Проверьте настройки браузера.');
+            } else {
+                alert(`Ошибка распознавания речи: ${event.error}`);
+            }
+        };
+        
+        recognition.onend = () => {
+            isRecording = false;
+            voiceButton.innerHTML = '<i class="fas fa-microphone"></i>';
+            voiceButton.classList.remove('recording');
+            console.log('Voice recognition ended');
+        };
+        
+        voiceButton.addEventListener('click', () => {
+            if (isRecording) {
+                recognition.stop();
+            } else {
+                recognition.start();
+            }
         });
     }
 });
