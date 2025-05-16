@@ -105,9 +105,10 @@
         max-width: 650px;
         margin: 0 auto;
         padding: 2.5rem;
-        background-color: rgba(30, 41, 59, 0.7);
+        background-color: var(--card-bg);
         border-radius: 1rem;
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+        box-shadow: var(--shadow-lg);
+        border: 1px solid var(--border-color);
     }
     
     /* Form layout improvements */
@@ -128,8 +129,9 @@
     }
     
     input:not([type="file"]), textarea {
-        background-color: rgba(15, 23, 42, 0.8);
-        border: 1px solid #334155;
+        background-color: var(--input-bg);
+        border: 1px solid var(--border-color);
+        color: var(--text-color);
     }
     
     /* Better field spacing */
@@ -145,27 +147,27 @@
     }
     
     .help-icon {
-        color: #64748b;
+        color: var(--text-muted);
         cursor: pointer;
         font-size: 0.875rem;
         transition: color 0.2s ease;
     }
     
     .help-icon:hover {
-        color: var(--primary-color, #3b82f6);
+        color: var(--primary-color);
     }
     
     .tooltip-content {
         visibility: hidden;
         position: absolute;
         width: 250px;
-        background-color: #fff;
-        color: #334155;
+        background-color: var(--card-bg);
+        color: var(--text-color);
         text-align: left;
         border-radius: 0.5rem;
         padding: 0.75rem;
         z-index: 100;
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        box-shadow: var(--shadow-md);
         right: 0;
         top: 100%;
         margin-top: 0.5rem;
@@ -174,7 +176,7 @@
         transform: translateY(-10px);
         transition: opacity 0.3s, transform 0.3s;
         pointer-events: none;
-        border: 1px solid #e5e7eb;
+        border: 1px solid var(--border-color);
     }
     
     .tooltip-container:hover .tooltip-content {
@@ -191,16 +193,16 @@
         display: inline-flex;
         align-items: center;
         padding: 0.75rem 1rem;
-        background-color: #f1f5f9;
+        background-color: var(--hover-bg);
         border-radius: 0.5rem;
         cursor: pointer;
         transition: all 0.3s ease;
         font-size: 0.875rem;
-        color: #334155;
+        color: var(--text-color);
     }
     
     .file-upload-label:hover {
-        background-color: #e2e8f0;
+        background-color: var(--border-color);
     }
     
     .file-upload-label i {
@@ -220,7 +222,7 @@
         display: inline-block;
         margin-left: 0.75rem;
         font-size: 0.875rem;
-        color: #64748b;
+        color: var(--text-muted);
     }
     
     /* Modern avatar upload styles */
@@ -243,50 +245,50 @@
         height: 120px;
         border-radius: 50%;
         object-fit: cover;
-        border: 3px solid var(--primary-color, #3b82f6);
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        border: 3px solid var(--primary-color);
+        box-shadow: var(--shadow);
     }
     
     .avatar-placeholder {
         width: 120px;
         height: 120px;
         margin: 0 auto;
-        background-color: #f1f5f9;
+        background-color: var(--hover-bg);
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 3rem;
-        color: #94a3b8;
+        color: var(--text-muted);
     }
     
     .avatar-dropzone {
         width: 100%;
         max-width: 350px;
-        border: 2px dashed #cbd5e1;
+        border: 2px dashed var(--border-color);
         border-radius: 0.75rem;
         padding: 1.25rem 1rem;
         text-align: center;
         cursor: pointer;
         transition: all 0.3s ease;
-        background-color: #f8fafc;
+        background-color: var(--card-bg);
     }
     
     .avatar-dropzone:hover {
-        border-color: var(--primary-color, #3b82f6);
-        background-color: rgba(59, 130, 246, 0.05);
+        border-color: var(--primary-color);
+        background-color: var(--hover-bg);
     }
     
     .dropzone-icon {
         font-size: 2rem;
-        color: var(--primary-color, #3b82f6);
+        color: var(--primary-color);
         margin-bottom: 0.5rem;
     }
     
     .dropzone-text {
         margin-bottom: 1rem;
         font-size: 0.9rem;
-        color: #64748b;
+        color: var(--text-muted);
     }
     
     .avatar-select-btn {
@@ -296,41 +298,20 @@
     
     .btn-outline {
         background-color: transparent;
-        border: 1px solid #cbd5e1;
-        color: #334155;
+        border: 1px solid var(--border-color);
+        color: var(--text-color);
         transition: all 0.3s ease;
     }
     
     .btn-outline:hover {
-        border-color: var(--primary-color, #3b82f6);
-        color: var(--primary-color, #3b82f6);
+        border-color: var(--primary-color);
+        color: var(--primary-color);
+        background-color: var(--hover-bg);
     }
     
     .avatar-dropzone.dragover {
-        border-color: var(--primary-color, #3b82f6);
-        background-color: rgba(59, 130, 246, 0.1);
-    }
-    
-    /* Dark mode support */
-    .dark-mode .avatar-placeholder {
-        background-color: #1e293b;
-        color: #64748b;
-    }
-    
-    .dark-mode .avatar-dropzone {
-        background-color: #0f172a;
-        border-color: #334155;
-    }
-    
-    .dark-mode .avatar-dropzone:hover {
-        background-color: #1e293b;
-        border-color: var(--primary-color, #3b82f6);
-    }
-    
-    .dark-mode .tooltip-content {
-        background-color: #1e293b;
-        color: #e2e8f0;
-        border-color: #334155;
+        border-color: var(--primary-color);
+        background-color: var(--hover-bg);
     }
     
     /* Improved responsive design */
@@ -416,11 +397,13 @@
     .auth-title {
         font-size: 1.75rem;
         margin-bottom: 0.5rem;
+        color: var(--heading-color);
     }
     
     .auth-subtitle {
         margin-bottom: 1.25rem;
         opacity: 0.9;
+        color: var(--text-color);
     }
 </style>
 
@@ -512,25 +495,64 @@
             }
         }
         
-        // Check if dark mode is active
-        function checkDarkMode() {
+        // Check if dark mode is active and apply appropriate styles
+        function applyThemeStyles() {
             const isDarkMode = document.body.classList.contains('dark-mode');
-            if (isDarkMode) {
-                if (avatarPlaceholder) {
-                    avatarPlaceholder.style.backgroundColor = '#1e293b';
-                }
-                if (dropzone) {
-                    dropzone.style.backgroundColor = '#0f172a';
-                }
+            
+            if (avatarPlaceholder) {
+                avatarPlaceholder.style.backgroundColor = isDarkMode ? '#1e293b' : '#f1f5f9';
+                avatarPlaceholder.style.color = isDarkMode ? '#64748b' : '#94a3b8';
             }
+            
+            if (dropzone) {
+                dropzone.style.backgroundColor = isDarkMode ? '#0f172a' : '#f8fafc';
+                dropzone.style.borderColor = isDarkMode ? '#334155' : '#cbd5e1';
+            }
+            
+            // Update other elements that need theme-specific styling
+            const tooltipContents = document.querySelectorAll('.tooltip-content');
+            tooltipContents.forEach(tooltip => {
+                tooltip.style.backgroundColor = isDarkMode ? '#1e293b' : '#fff';
+                tooltip.style.color = isDarkMode ? '#e2e8f0' : '#334155';
+                tooltip.style.borderColor = isDarkMode ? '#334155' : '#e5e7eb';
+            });
+            
+            // Update text colors
+            const authTitle = document.querySelector('.auth-title');
+            if (authTitle) {
+                authTitle.style.color = isDarkMode ? 'var(--heading-color)' : '';
+            }
+            
+            const authSubtitle = document.querySelector('.auth-subtitle');
+            if (authSubtitle) {
+                authSubtitle.style.color = isDarkMode ? 'var(--text-color)' : '';
+            }
+            
+            const dropzoneText = document.querySelector('.dropzone-text');
+            if (dropzoneText) {
+                dropzoneText.style.color = isDarkMode ? 'var(--text-muted)' : '';
+            }
+            
+            // Update form elements
+            const formLabels = document.querySelectorAll('.form-label');
+            formLabels.forEach(label => {
+                label.style.color = isDarkMode ? 'var(--text-color)' : '';
+            });
+            
+            const inputs = document.querySelectorAll('input:not([type="file"]), textarea');
+            inputs.forEach(input => {
+                input.style.backgroundColor = isDarkMode ? 'var(--input-bg)' : '';
+                input.style.color = isDarkMode ? 'var(--text-color)' : '';
+                input.style.borderColor = isDarkMode ? 'var(--border-color)' : '';
+            });
         }
         
-        // Initial dark mode check
-        checkDarkMode();
+        // Initial application of theme styles
+        applyThemeStyles();
         
         // Listen for theme changes
         document.addEventListener('themeChanged', function(event) {
-            checkDarkMode();
+            applyThemeStyles();
         });
     });
 </script>

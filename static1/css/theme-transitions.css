@@ -1,0 +1,74 @@
+/**
+ * Enhanced theme transitions for smooth color changes
+ */
+
+/* Base transition properties for elements that change with theme */
+body, 
+button,
+a,
+input,
+select,
+textarea,
+.auth-container,
+.auth-title,
+.auth-subtitle,
+.avatar-placeholder,
+.avatar-dropzone,
+.tooltip-content,
+.form-label,
+.dropzone-text,
+.btn-outline,
+h1, h2, h3, h4, h5, h6, 
+p, span, label, 
+.car-title a, 
+.info-value, 
+.car-detail, 
+.car-meta, 
+.car-seller {
+    transition: 
+        color 0.3s ease,
+        background-color 0.3s ease,
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+/* Auth page specific transitions */
+.auth-container,
+.avatar-placeholder,
+.avatar-dropzone,
+.tooltip-content {
+    transition: 
+        color 0.3s ease,
+        background-color 0.3s ease,
+        border-color 0.3s ease;
+}
+
+/* Make sure color transitions are smooth for specific elements */
+.auth-title,
+.auth-subtitle,
+.form-label,
+.dropzone-text {
+    transition: color 0.3s ease;
+}
+
+/* Prevent transition issues by setting explicit initial theme values */
+.dark-mode {
+    --text-color-transition: var(--text-color);
+    --heading-color-transition: var(--heading-color);
+    --text-muted-transition: var(--text-muted);
+    --card-bg-transition: var(--card-bg);
+    --input-bg-transition: var(--input-bg);
+    --border-color-transition: var(--border-color);
+    --hover-bg-transition: var(--hover-bg);
+}
+
+/* Custom animations for theme toggle */
+@keyframes fadeTextColor {
+    from { color: transparent; }
+    to { color: inherit; }
+}
+
+/* Apply animation to elements that need it during theme change */
+.theme-transition {
+    animation: fadeTextColor 0.3s ease forwards;
+}

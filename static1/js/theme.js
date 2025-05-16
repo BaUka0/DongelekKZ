@@ -27,7 +27,8 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Вспомогательная функция для обновления текстовых элементов в соответствии с темой
     const updateTextElements = (isDarkMode) => {
-        const textElements = document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, span, label, .car-title a, .info-value, .car-detail, .car-meta, .car-seller');
+        // Расширенный список селекторов для лучшего охвата всех текстовых элементов
+        const textElements = document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, span, label, a, .car-title a, .info-value, .car-detail, .car-meta, .car-seller, .auth-title, .auth-subtitle, .form-label, .help-text, .dropzone-text, button');
         
         textElements.forEach(element => {
             // Оптимизация: устраняет ненужное мерцание во время смены темы
@@ -43,15 +44,41 @@ document.addEventListener('DOMContentLoaded', () => {
                 else if (element.classList.contains('text-muted') ||
                          element.classList.contains('car-meta') ||
                          element.classList.contains('car-seller') ||
-                         element.classList.contains('info-label')) {
+                         element.classList.contains('info-label') ||
+                         element.classList.contains('dropzone-text')) {
                     element.style.color = 'var(--text-muted)';
+                }
+                else if (element.classList.contains('auth-title')) {
+                    element.style.color = 'var(--heading-color)';
+                }
+                else if (element.classList.contains('auth-subtitle')) {
+                    element.style.color = 'var(--text-color)';
+                }
+                else if (element.tagName === 'BUTTON' && !element.classList.contains('btn-primary')) {
+                    // Особая обработка для кнопок без первичного стиля
+                    if (!element.style.color) {
+                        element.style.color = 'var(--text-color)';
+                    }
+                }
+                else if (element.tagName === 'A' && !element.closest('.btn')) {
+                    // Проверка на ссылки, которые не являются кнопками
+                    if (!element.style.color && !element.classList.contains('primary-color')) {
+                        // Сохраняем цвет первичных ссылок
+                        element.style.color = 'var(--text-color)';
+                    }
+                }
+                else if (element.classList.contains('form-label')) {
+                    element.style.color = 'var(--text-color)';
                 }
                 else {
                     element.style.color = 'var(--text-color)';
                 }
             } else {
                 // Возврат к стандартным цветам для светлой темы
-                element.style.color = '';
+                // Избегаем сброса цветов для элементов с явно заданными стилями
+                if (!element.hasAttribute('style-preserved')) {
+                    element.style.color = '';
+                }
             }
         });
         
@@ -59,6 +86,63 @@ document.addEventListener('DOMContentLoaded', () => {
         const carTitleLinks = document.querySelectorAll('.car-title a');
         carTitleLinks.forEach(link => {
             link.style.color = isDarkMode ? 'var(--heading-color)' : '';
+        });
+        
+        // Обновляем стили форм и полей ввода
+        updateFormElements(isDarkMode);
+    };
+    
+    // Обновление стилей для форм и полей ввода
+    const updateFormElements = (isDarkMode) => {
+        // Находим все формы и поля ввода
+        const formElements = document.querySelectorAll('input, select, textarea, .avatar-placeholder, .avatar-dropzone, .tooltip-content');
+        
+        formElements.forEach(element => {
+            if (isDarkMode) {
+                if (element.classList.contains('avatar-placeholder')) {
+                    element.style.backgroundColor = '#1e293b';
+                    element.style.color = '#64748b';
+                } 
+                else if (element.classList.contains('avatar-dropzone')) {
+                    element.style.backgroundColor = '#0f172a';
+                    element.style.borderColor = '#334155';
+                }
+                else if (element.classList.contains('tooltip-content')) {
+                    element.style.backgroundColor = '#1e293b';
+                    element.style.color = '#e2e8f0';
+                    element.style.borderColor = '#334155';
+                }
+                else if (element.tagName === 'INPUT' || element.tagName === 'SELECT' || element.tagName === 'TEXTAREA') {
+                    // Сохраняем специальные стили для полей с пользовательскими стилями
+                    if (!element.className.includes('auth-specific')) {
+                        element.style.backgroundColor = 'var(--input-bg)';
+                        element.style.color = 'var(--text-color)';
+                        element.style.borderColor = 'var(--border-color)';
+                    }
+                }
+            } else {
+                // Сброс стилей для светлой темы
+                if (element.classList.contains('avatar-placeholder')) {
+                    element.style.backgroundColor = '#f1f5f9';
+                    element.style.color = '#94a3b8';
+                } 
+                else if (element.classList.contains('avatar-dropzone')) {
+                    element.style.backgroundColor = '#f8fafc';
+                    element.style.borderColor = '#cbd5e1';
+                }
+                else if (element.classList.contains('tooltip-content')) {
+                    element.style.backgroundColor = '#fff';
+                    element.style.color = '#334155';
+                    element.style.borderColor = '#e5e7eb';
+                }
+                else if (element.tagName === 'INPUT' || element.tagName === 'SELECT' || element.tagName === 'TEXTAREA') {
+                    if (!element.className.includes('auth-specific')) {
+                        element.style.backgroundColor = '';
+                        element.style.color = '';
+                        element.style.borderColor = '';
+                    }
+                }
+            }
         });
     };
     
