@@ -4,7 +4,7 @@
 
 {% block content %}
 <section class="auth-section profile-section">
-    <div class="auth-container profile-container">
+    <div class="auth-container profile-container wide-container">
         <div class="auth-header">
             <h1 class="auth-title">Профильді өзгерту</h1>
             <p class="auth-subtitle">Жеке деректеріңізді жаңартыңыз</p>
@@ -13,37 +13,36 @@
         <div class="profile-content">
             <div class="profile-avatar-section">
                 <div class="profile-avatar">
-                    {% if user.avatar %}
-                        <img src="{{ user.avatar.url }}" alt="{{ user.username }}" class="avatar-preview" id="current-avatar">
-                    {% else %}
-                        <div class="avatar-placeholder" id="avatar-placeholder">
-                            <i class="fas fa-user"></i>
+                    <div class="avatar-wrapper">
+                        {% if user.avatar %}
+                            <img src="{{ user.avatar.url }}" alt="{{ user.username }}" class="avatar-preview" id="current-avatar">
+                        {% else %}
+                            <div class="avatar-placeholder" id="avatar-placeholder">
+                                <i class="fas fa-user"></i>
+                            </div>
+                        {% endif %}
+                        <div id="avatar-preview-container" class="avatar-preview-container" style="display: none;">
+                            <img id="avatar-preview" class="avatar-preview" src="" alt="Preview">
                         </div>
-                    {% endif %}
-                    <div id="avatar-preview-container" class="avatar-preview-container" style="display: none;">
-                        <img id="avatar-preview" class="avatar-preview" src="" alt="Preview">
+                        
+                        <div class="avatar-controls">
+                            <label for="id_avatar" class="avatar-upload-btn">
+                                <i class="fas fa-camera"></i>
+                                <span>Жаңа сурет</span>
+                            </label>
+                            {% if user.avatar %}
+                            <button type="button" id="delete-avatar-btn" class="avatar-delete-btn">
+                                <i class="fas fa-trash"></i>
+                                <span>Жою</span>
+                            </button>
+                            {% endif %}
+                        </div>
                     </div>
-                </div>
                 
-                <div class="profile-username">
-                    <h3>{{ user.username }}</h3>
-                    <p class="profile-date">Тіркелген: {{ user.date_joined|date:"d.m.Y" }}</p>
-                </div>
-                
-                <div class="avatar-upload-controls">
-                    <div class="avatar-dropzone" id="avatar-dropzone">
-                        <i class="fas fa-cloud-upload-alt dropzone-icon"></i>
-                        <p class="dropzone-text">Аватарды осында сүйреңіз<br>немесе</p>
-                        <button type="button" class="btn btn-outline avatar-select-btn">
-                            <i class="fas fa-image"></i> Аватар таңдау
-                        </button>
+                    <div class="profile-username">
+                        <h3>{{ user.username }}</h3>
+                        <p class="profile-date">Тіркелген: {{ user.date_joined|date:"d.m.Y" }}</p>
                     </div>
-                    
-                    {% if user.avatar %}
-                    <button type="button" class="btn btn-outline btn-danger remove-avatar-btn" id="remove-avatar-btn">
-                        <i class="fas fa-trash-alt"></i> Аватарды жою
-                    </button>
-                    {% endif %}
                 </div>
             </div>
             
@@ -94,19 +93,34 @@
     </div>
 </section>
 
+<!-- Confirmation Modal -->
+<div id="confirm-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h2>Аватарды жою</h2>
+        <p>Сіз аватарыңызды жойғыңыз келе ме?</p>
+        <div class="modal-actions">
+            <button id="confirm-delete" class="btn btn-danger">Иә, жою</button>
+            <button id="cancel-delete" class="btn btn-secondary">Жоқ</button>
+        </div>
+    </div>
+</div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Get DOM elements
         const fileInput = document.querySelector('input[type="file"]');
-        const dropzone = document.getElementById('avatar-dropzone');
         const avatarPlaceholder = document.getElementById('avatar-placeholder');
         const currentAvatar = document.getElementById('current-avatar');
         const previewContainer = document.getElementById('avatar-preview-container');
         const previewImg = document.getElementById('avatar-preview');
-        const removeAvatarBtn = document.getElementById('remove-avatar-btn');
         const removeAvatarField = document.getElementById('remove-avatar');
-        const avatarSelectBtn = document.querySelector('.avatar-select-btn');
+        const deleteAvatarBtn = document.getElementById('delete-avatar-btn');
+        const confirmModal = document.getElementById('confirm-modal');
+        const closeModal = document.querySelector('.close-modal');
+        const confirmDelete = document.getElementById('confirm-delete');
+        const cancelDelete = document.getElementById('cancel-delete');
+        const profileForm = document.getElementById('profile-form');
         
         // Handle file selection
         fileInput.addEventListener('change', function() {
@@ -143,81 +157,45 @@
             }
         });
         
-        // Open file dialog when clicking the select button
-        if (avatarSelectBtn) {
-            avatarSelectBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                fileInput.click();
+        // Handle delete avatar button click
+        if (deleteAvatarBtn) {
+            deleteAvatarBtn.addEventListener('click', function() {
+                confirmModal.style.display = 'flex';
             });
         }
         
-        // Handle drag and drop
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-            dropzone.addEventListener(eventName, preventDefaults, false);
-        });
-        
-        function preventDefaults(e) {
-            e.preventDefault();
-            e.stopPropagation();
+        // Close modal when clicking the X
+        if (closeModal) {
+            closeModal.addEventListener('click', function() {
+                confirmModal.style.display = 'none';
+            });
         }
         
-        ['dragenter', 'dragover'].forEach(eventName => {
-            dropzone.addEventListener(eventName, highlight, false);
-        });
-        
-        ['dragleave', 'drop'].forEach(eventName => {
-            dropzone.addEventListener(eventName, unhighlight, false);
-        });
-        
-        function highlight() {
-            dropzone.classList.add('dragover');
-        }
-        
-        function unhighlight() {
-            dropzone.classList.remove('dragover');
-        }
-        
-        dropzone.addEventListener('drop', handleDrop, false);
-        
-        function handleDrop(e) {
-            const dt = e.dataTransfer;
-            const files = dt.files;
-            
-            if (files.length > 0) {
-                fileInput.files = files;
-                const event = new Event('change');
-                fileInput.dispatchEvent(event);
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            if (event.target === confirmModal) {
+                confirmModal.style.display = 'none';
             }
+        });
+        
+        // Handle confirm delete
+        if (confirmDelete) {
+            confirmDelete.addEventListener('click', function() {
+                removeAvatarField.value = 'true';
+                
+                // Submit the form to apply changes immediately
+                if (profileForm) {
+                    profileForm.submit();
+                }
+                
+                confirmModal.style.display = 'none';
+            });
         }
         
-        // Handle remove avatar button
-        if (removeAvatarBtn) {
-            removeAvatarBtn.addEventListener('click', function() {
-                if (confirm('Аватарды жойғыңыз келетініне сенімдісіз бе?')) {
-                    // Set the hidden field value to true
-                    removeAvatarField.value = 'true';
-                    
-                    // Update UI
-                    if (currentAvatar) currentAvatar.style.display = 'none';
-                    if (previewContainer) previewContainer.style.display = 'none';
-                    
-                    // Show placeholder
-                    if (!avatarPlaceholder) {
-                        const newPlaceholder = document.createElement('div');
-                        newPlaceholder.id = 'avatar-placeholder';
-                        newPlaceholder.className = 'avatar-placeholder';
-                        newPlaceholder.innerHTML = '<i class="fas fa-user"></i>';
-                        document.querySelector('.profile-avatar').appendChild(newPlaceholder);
-                    } else {
-                        avatarPlaceholder.style.display = 'flex';
-                    }
-                    
-                    // Clear file input
-                    fileInput.value = '';
-                    
-                    // Hide remove button
-                    this.style.display = 'none';
-                }
+        // Handle cancel delete
+        if (cancelDelete) {
+            cancelDelete.addEventListener('click', function() {
+                confirmModal.style.display = 'none';
             });
         }
         
@@ -233,13 +211,6 @@
                     avatarPlaceholder.style.backgroundColor = 'var(--hover-bg)';
                 }
             }
-            
-            // Update dropzone appearance for dark mode
-            if (isDarkMode) {
-                dropzone.style.backgroundColor = 'var(--card-bg)';
-            } else {
-                dropzone.style.backgroundColor = 'var(--hover-bg)';
-            }
         });
         
         // Initial check for dark mode
@@ -248,8 +219,147 @@
             if (avatarPlaceholder) {
                 avatarPlaceholder.style.backgroundColor = 'var(--card-bg)';
             }
-            dropzone.style.backgroundColor = 'var(--card-bg)';
         }
     });
 </script>
+
+<style>
+    /* Wider container for desktop */
+    .wide-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+    
+    /* Improved profile content layout */
+    .profile-content {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+    
+    @media (min-width: 768px) {
+        .profile-content {
+            flex-direction: row;
+            align-items: flex-start;
+        }
+        
+        .profile-avatar-section {
+            flex: 0 0 30%;
+        }
+        
+        .profile-form-section {
+            flex: 0 0 65%;
+        }
+    }
+    
+    /* Modern avatar styling */
+    .avatar-wrapper {
+        position: relative;
+        margin-bottom: 1.5rem;
+    }
+    
+    .avatar-preview, .avatar-placeholder {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin: 0 auto;
+        display: block;
+    }
+    
+    .avatar-placeholder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        color: var(--text-muted);
+    }
+    
+    .avatar-controls {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 1rem;
+    }
+    
+    .avatar-upload-btn, .avatar-delete-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .avatar-upload-btn {
+        background-color: var(--primary-color);
+        color: white;
+    }
+    
+    .avatar-delete-btn {
+        background-color: var(--danger-color, #dc3545);
+        color: white;
+        border: none;
+    }
+    
+    .avatar-upload-btn:hover, .avatar-delete-btn:hover {
+        opacity: 0.9;
+    }
+    
+    /* Confirmation modal styling */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .modal-content {
+        background-color: var(--card-bg, white);
+        border-radius: 8px;
+        padding: 2rem;
+        position: relative;
+        width: 90%;
+        max-width: 500px;
+    }
+    
+    .close-modal {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
+    
+    .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+    
+    /* Improved form styling */
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .hidden-field {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        border: 0;
+    }
+</style>
 {% endblock %}

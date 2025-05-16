@@ -26,7 +26,15 @@
                 {% endif %}
                 
                 <div class="form-group">
-                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                    <div class="form-label-container">
+                        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                        {% if field.help_text %}
+                            <div class="tooltip-container">
+                                <i class="fas fa-question-circle help-icon"></i>
+                                <div class="tooltip-content">{{ field.help_text|safe }}</div>
+                            </div>
+                        {% endif %}
+                    </div>
                     
                     {% if field.name == 'username' %}
                         <div class="form-input-group">
@@ -71,10 +79,6 @@
                     {% else %}
                         {{ field }}
                     {% endif %}
-                    
-                    {% if field.help_text %}
-                        <p class="help-text">{{ field.help_text|safe }}</p>
-                    {% endif %}
                 </div>
             {% endfor %}
             
@@ -95,6 +99,90 @@
 </section>
 
 <style>
+    /* Improved container width for desktop */
+    .auth-container {
+        width: 100%;
+        max-width: 650px;
+        margin: 0 auto;
+        padding: 2.5rem;
+        background-color: rgba(30, 41, 59, 0.7);
+        border-radius: 1rem;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Form layout improvements */
+    .form-group {
+        margin-bottom: 1.25rem;
+    }
+    
+    .form-label-container {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 0.35rem;
+    }
+    
+    /* More compact inputs */
+    .form-input-group {
+        margin-bottom: 0.5rem;
+    }
+    
+    input:not([type="file"]), textarea {
+        background-color: rgba(15, 23, 42, 0.8);
+        border: 1px solid #334155;
+    }
+    
+    /* Better field spacing */
+    .auth-form {
+        padding: 0.5rem;
+        margin-top: 1rem;
+    }
+    
+    /* Modern tooltip style */
+    .tooltip-container {
+        position: relative;
+        display: inline-block;
+    }
+    
+    .help-icon {
+        color: #64748b;
+        cursor: pointer;
+        font-size: 0.875rem;
+        transition: color 0.2s ease;
+    }
+    
+    .help-icon:hover {
+        color: var(--primary-color, #3b82f6);
+    }
+    
+    .tooltip-content {
+        visibility: hidden;
+        position: absolute;
+        width: 250px;
+        background-color: #fff;
+        color: #334155;
+        text-align: left;
+        border-radius: 0.5rem;
+        padding: 0.75rem;
+        z-index: 100;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        right: 0;
+        top: 100%;
+        margin-top: 0.5rem;
+        font-size: 0.75rem;
+        opacity: 0;
+        transform: translateY(-10px);
+        transition: opacity 0.3s, transform 0.3s;
+        pointer-events: none;
+        border: 1px solid #e5e7eb;
+    }
+    
+    .tooltip-container:hover .tooltip-content {
+        visibility: visible;
+        opacity: 1;
+        transform: translateY(0);
+    }
+    
     .file-upload-container {
         margin-top: 0.5rem;
     }
@@ -135,18 +223,12 @@
         color: #64748b;
     }
     
-    .help-text {
-        margin-top: 0.25rem;
-        font-size: 0.75rem;
-        color: #64748b;
-    }
-    
     /* Modern avatar upload styles */
     .avatar-upload-section {
         display: flex;
         flex-direction: column;
         align-items: center;
-        margin: 1rem 0;
+        margin: 0.75rem 0;
         gap: 1rem;
     }
     
@@ -183,7 +265,7 @@
         max-width: 350px;
         border: 2px dashed #cbd5e1;
         border-radius: 0.75rem;
-        padding: 1.5rem 1rem;
+        padding: 1.25rem 1rem;
         text-align: center;
         cursor: pointer;
         transition: all 0.3s ease;
@@ -245,7 +327,76 @@
         border-color: var(--primary-color, #3b82f6);
     }
     
-    @media (max-width: 768px) {
+    .dark-mode .tooltip-content {
+        background-color: #1e293b;
+        color: #e2e8f0;
+        border-color: #334155;
+    }
+    
+    /* Improved responsive design */
+    @media (min-width: 1024px) {
+        .auth-container {
+            max-width: 800px;
+            padding: 2.5rem 3rem;
+        }
+        
+        .auth-form {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            column-gap: 2rem;
+            row-gap: 0.75rem;
+        }
+        
+        .auth-form .form-group {
+            margin-bottom: 0.75rem;
+        }
+        
+        /* Full-width elements */
+        .auth-form .form-group:has(textarea),
+        .auth-form .form-group:has(.avatar-upload-section),
+        .auth-form .auth-error,
+        .auth-form .form-actions {
+            grid-column: 1 / -1;
+        }
+        
+        /* More balanced layout */
+        .avatar-upload-section {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            align-items: center;
+            gap: 1.5rem;
+            margin: 1rem 0 0.5rem;
+        }
+        
+        .avatar-preview-container, 
+        .avatar-placeholder {
+            grid-row: span 2;
+        }
+    }
+    
+    @media (min-width: 768px) and (max-width: 1023px) {
+        .auth-container {
+            max-width: 650px;
+            padding: 2rem;
+        }
+        
+        .avatar-preview, .avatar-placeholder {
+            width: 130px;
+            height: 130px;
+        }
+        
+        /* Better spacing for tablet view */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+    }
+    
+    @media (max-width: 767px) {
+        .auth-container {
+            padding: 1.5rem;
+            max-width: 100%;
+        }
+        
         .avatar-upload-section {
             margin: 0.5rem 0;
         }
@@ -255,6 +406,21 @@
             height: 100px;
             font-size: 2.5rem;
         }
+        
+        .tooltip-content {
+            width: 200px;
+        }
+    }
+    
+    /* Additional visual improvements */
+    .auth-title {
+        font-size: 1.75rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .auth-subtitle {
+        margin-bottom: 1.25rem;
+        opacity: 0.9;
     }
 </style>
 

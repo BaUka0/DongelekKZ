@@ -11,6 +11,8 @@ from django.urls import reverse
 from .models import CustomUser, OTPCode
 from .forms import CustomUserCreationForm, ProfileUpdateForm, OTPVerificationForm
 import random
+import os
+from django.conf import settings
 
 class SignUpView(CreateView):
     form_class = CustomUserCreationForm
@@ -32,6 +34,19 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_object(self, queryset=None):
         return self.request.user
+
+    def form_valid(self, form):
+        user = form.instance
+        remove_avatar = self.request.POST.get('remove_avatar') == 'true'
+        
+        if remove_avatar and user.avatar and user.avatar.name != user.DEFAULT_AVATAR_PATH:
+            # Set to default avatar instead of None
+            user.set_default_avatar()
+            messages.success(self.request, 'Аватар өзгерді. Стандартты аватар орнатылды.')
+            return redirect(self.success_url)
+        
+        response = super().form_valid(form)
+        return response
 
 def send_otp(user):
     code = f"{random.randint(100000, 999999)}"

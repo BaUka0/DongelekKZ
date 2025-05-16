@@ -6,6 +6,8 @@ import random
 import datetime
 from datetime import datetime, timedelta
 from django.utils import timezone
+from django.core.files.storage import default_storage
+import os
 
 class CustomUser(AbstractUser):
     class Role(models.TextChoices):
@@ -20,14 +22,36 @@ class CustomUser(AbstractUser):
         verbose_name='Роль'
     )
 
+    # Define a default avatar constant path that exists in your media directory
+    DEFAULT_AVATAR_PATH = 'avatars/default_avatar.png'
+
     avatar = models.ImageField(
         upload_to='avatars/',
         null=True,
         blank=True,
-        default='avatars/default_avatar.png',
+        default=DEFAULT_AVATAR_PATH,
         verbose_name='Аватар'
     )
     bio = models.TextField(blank=True, null=True, verbose_name='О себе')
+    
+    def set_default_avatar(self):
+        """Set the avatar to the default image"""
+        if self.avatar and self.avatar.name != self.DEFAULT_AVATAR_PATH:
+            # Store the old avatar path to delete it after changing
+            old_avatar = self.avatar.path if hasattr(self.avatar, 'path') else None
+            
+            # Set to default avatar
+            self.avatar = self.DEFAULT_AVATAR_PATH
+            self.save(update_fields=['avatar'])
+            
+            # Delete the old avatar file if it exists and isn't the default
+            if old_avatar and os.path.exists(old_avatar):
+                try:
+                    os.remove(old_avatar)
+                except (OSError, FileNotFoundError):
+                    # Log error if needed but don't break the flow
+                    pass
+        
     @property
     def is_admin(self):
         return self.role == self.Role.ADMIN
