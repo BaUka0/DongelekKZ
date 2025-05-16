@@ -3,63 +3,88 @@
 {% block title %}Профильді өзгерту | Dongelek{% endblock %}
 
 {% block content %}
-<section class="auth-section">
-    <div class="auth-container">
+<section class="auth-section profile-section">
+    <div class="auth-container profile-container">
         <div class="auth-header">
             <h1 class="auth-title">Профильді өзгерту</h1>
             <p class="auth-subtitle">Жеке деректеріңізді жаңартыңыз</p>
         </div>
         
-        <div class="profile-avatar">
-            {% if user.avatar %}
-                <img src="{{ user.avatar.url }}" alt="{{ user.username }}" class="avatar-preview">
-            {% else %}
-                <div class="avatar-placeholder">
-                    <i class="fas fa-user"></i>
-                </div>
-            {% endif %}
-        </div>
-        
-        <form method="post" enctype="multipart/form-data" class="auth-form">
-            {% csrf_token %}
-            
-            {% for field in form %}
-                <div class="form-group">
-                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
-                    
-                    {% if field.name == 'avatar' %}
-                        <div class="file-upload-container">
-                            <label for="{{ field.id_for_label }}" class="file-upload-label">
-                                <i class="fas fa-cloud-upload-alt"></i>
-                                <span>Жаңа аватар таңдау</span>
-                            </label>
-                            {{ field }}
-                            <span class="file-name">Файл таңдалмаған</span>
-                        </div>
+        <div class="profile-content">
+            <div class="profile-avatar-section">
+                <div class="profile-avatar">
+                    {% if user.avatar %}
+                        <img src="{{ user.avatar.url }}" alt="{{ user.username }}" class="avatar-preview" id="current-avatar">
                     {% else %}
-                        {{ field }}
-                    {% endif %}
-                    
-                    {% if field.errors %}
-                        <div class="field-errors">
-                            {% for error in field.errors %}
-                                <p class="error-message">{{ error }}</p>
-                            {% endfor %}
+                        <div class="avatar-placeholder" id="avatar-placeholder">
+                            <i class="fas fa-user"></i>
                         </div>
                     {% endif %}
+                    <div id="avatar-preview-container" class="avatar-preview-container" style="display: none;">
+                        <img id="avatar-preview" class="avatar-preview" src="" alt="Preview">
+                    </div>
+                </div>
+                
+                <div class="profile-username">
+                    <h3>{{ user.username }}</h3>
+                    <p class="profile-date">Тіркелген: {{ user.date_joined|date:"d.m.Y" }}</p>
+                </div>
+                
+                <div class="avatar-upload-controls">
+                    <div class="avatar-dropzone" id="avatar-dropzone">
+                        <i class="fas fa-cloud-upload-alt dropzone-icon"></i>
+                        <p class="dropzone-text">Аватарды осында сүйреңіз<br>немесе</p>
+                        <button type="button" class="btn btn-outline avatar-select-btn">
+                            <i class="fas fa-image"></i> Аватар таңдау
+                        </button>
+                    </div>
                     
-                    {% if field.help_text %}
-                        <p class="help-text">{{ field.help_text|safe }}</p>
+                    {% if user.avatar %}
+                    <button type="button" class="btn btn-outline btn-danger remove-avatar-btn" id="remove-avatar-btn">
+                        <i class="fas fa-trash-alt"></i> Аватарды жою
+                    </button>
                     {% endif %}
                 </div>
-            {% endfor %}
-            
-            <div class="form-actions">
-                <button type="submit" class="btn btn-primary btn-block">
-                    <i class="fas fa-save"></i> Сақтау
-                </button>
             </div>
-        </form>
+            
+            <div class="profile-form-section">
+                <form method="post" enctype="multipart/form-data" class="auth-form" id="profile-form">
+                    {% csrf_token %}
+                    
+                    <input type="hidden" name="remove_avatar" id="remove-avatar" value="false">
+                    
+                    {% for field in form %}
+                        <div class="form-group {% if field.name == 'avatar' %}hidden-field{% endif %}">
+                            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                            
+                            {% if field.name == 'avatar' %}
+                                {{ field }}
+                            {% else %}
+                                {{ field }}
+                            {% endif %}
+                            
+                            {% if field.errors %}
+                                <div class="field-errors">
+                                    {% for error in field.errors %}
+                                        <p class="error-message">{{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
+                            
+                            {% if field.help_text %}
+                                <p class="help-text">{{ field.help_text|safe }}</p>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary btn-block">
+                            <i class="fas fa-save"></i> Сақтау
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
         
         <div class="auth-links">
             <a href="{% url 'index' %}" class="auth-link">
@@ -69,103 +94,162 @@
     </div>
 </section>
 
-<style>
-    .profile-avatar {
-        text-align: center;
-        margin-bottom: 1.5rem;
-    }
-    
-    .avatar-preview {
-        width: 120px;
-        height: 120px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 3px solid #2563eb;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    }
-    
-    .avatar-placeholder {
-        width: 120px;
-        height: 120px;
-        margin: 0 auto;
-        background-color: #e2e8f0;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 3rem;
-        color: #94a3b8;
-    }
-    
-    .file-upload-container {
-        margin-top: 0.5rem;
-    }
-    
-    .file-upload-label {
-        display: inline-flex;
-        align-items: center;
-        padding: 0.75rem 1rem;
-        background-color: #f1f5f9;
-        border-radius: 0.5rem;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-size: 0.875rem;
-        color: #334155;
-    }
-    
-    .file-upload-label:hover {
-        background-color: #e2e8f0;
-    }
-    
-    .file-upload-label i {
-        margin-right: 0.5rem;
-    }
-    
-    input[type="file"] {
-        position: absolute;
-        width: 0.1px;
-        height: 0.1px;
-        opacity: 0;
-        overflow: hidden;
-        z-index: -1;
-    }
-    
-    .file-name {
-        display: inline-block;
-        margin-left: 0.75rem;
-        font-size: 0.875rem;
-        color: #64748b;
-    }
-    
-    .field-errors {
-        margin-top: 0.5rem;
-    }
-    
-    .error-message {
-        color: #ef4444;
-        font-size: 0.875rem;
-        margin-bottom: 0.25rem;
-    }
-    
-    .help-text {
-        margin-top: 0.25rem;
-        font-size: 0.75rem;
-        color: #64748b;
-    }
-</style>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Get DOM elements
         const fileInput = document.querySelector('input[type="file"]');
-        const fileName = document.querySelector('.file-name');
+        const dropzone = document.getElementById('avatar-dropzone');
+        const avatarPlaceholder = document.getElementById('avatar-placeholder');
+        const currentAvatar = document.getElementById('current-avatar');
+        const previewContainer = document.getElementById('avatar-preview-container');
+        const previewImg = document.getElementById('avatar-preview');
+        const removeAvatarBtn = document.getElementById('remove-avatar-btn');
+        const removeAvatarField = document.getElementById('remove-avatar');
+        const avatarSelectBtn = document.querySelector('.avatar-select-btn');
         
+        // Handle file selection
         fileInput.addEventListener('change', function() {
             if (this.files && this.files.length > 0) {
-                fileName.textContent = this.files[0].name;
-            } else {
-                fileName.textContent = 'Файл таңдалмаған';
+                const file = this.files[0];
+                
+                // Check if file is an image
+                if (!file.type.match('image.*')) {
+                    alert('Тек қана сурет файлдарын таңдаңыз.');
+                    return;
+                }
+                
+                // Check file size (max 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('Файл өлшемі 5MB аспауы керек.');
+                    return;
+                }
+                
+                // Show preview
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // Hide current avatar or placeholder
+                    if (currentAvatar) currentAvatar.style.display = 'none';
+                    if (avatarPlaceholder) avatarPlaceholder.style.display = 'none';
+                    
+                    // Show preview
+                    previewImg.src = e.target.result;
+                    previewContainer.style.display = 'block';
+                    
+                    // Reset remove avatar flag if a new image is selected
+                    if (removeAvatarField) removeAvatarField.value = 'false';
+                };
+                reader.readAsDataURL(file);
             }
         });
+        
+        // Open file dialog when clicking the select button
+        if (avatarSelectBtn) {
+            avatarSelectBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                fileInput.click();
+            });
+        }
+        
+        // Handle drag and drop
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropzone.addEventListener(eventName, preventDefaults, false);
+        });
+        
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropzone.addEventListener(eventName, highlight, false);
+        });
+        
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropzone.addEventListener(eventName, unhighlight, false);
+        });
+        
+        function highlight() {
+            dropzone.classList.add('dragover');
+        }
+        
+        function unhighlight() {
+            dropzone.classList.remove('dragover');
+        }
+        
+        dropzone.addEventListener('drop', handleDrop, false);
+        
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            
+            if (files.length > 0) {
+                fileInput.files = files;
+                const event = new Event('change');
+                fileInput.dispatchEvent(event);
+            }
+        }
+        
+        // Handle remove avatar button
+        if (removeAvatarBtn) {
+            removeAvatarBtn.addEventListener('click', function() {
+                if (confirm('Аватарды жойғыңыз келетініне сенімдісіз бе?')) {
+                    // Set the hidden field value to true
+                    removeAvatarField.value = 'true';
+                    
+                    // Update UI
+                    if (currentAvatar) currentAvatar.style.display = 'none';
+                    if (previewContainer) previewContainer.style.display = 'none';
+                    
+                    // Show placeholder
+                    if (!avatarPlaceholder) {
+                        const newPlaceholder = document.createElement('div');
+                        newPlaceholder.id = 'avatar-placeholder';
+                        newPlaceholder.className = 'avatar-placeholder';
+                        newPlaceholder.innerHTML = '<i class="fas fa-user"></i>';
+                        document.querySelector('.profile-avatar').appendChild(newPlaceholder);
+                    } else {
+                        avatarPlaceholder.style.display = 'flex';
+                    }
+                    
+                    // Clear file input
+                    fileInput.value = '';
+                    
+                    // Hide remove button
+                    this.style.display = 'none';
+                }
+            });
+        }
+        
+        // Apply dark mode colors
+        document.addEventListener('themeChanged', function(event) {
+            const isDarkMode = event.detail.theme === 'dark';
+            const avatarPlaceholder = document.querySelector('.avatar-placeholder');
+            
+            if (avatarPlaceholder) {
+                if (isDarkMode) {
+                    avatarPlaceholder.style.backgroundColor = 'var(--card-bg)';
+                } else {
+                    avatarPlaceholder.style.backgroundColor = 'var(--hover-bg)';
+                }
+            }
+            
+            // Update dropzone appearance for dark mode
+            if (isDarkMode) {
+                dropzone.style.backgroundColor = 'var(--card-bg)';
+            } else {
+                dropzone.style.backgroundColor = 'var(--hover-bg)';
+            }
+        });
+        
+        // Initial check for dark mode
+        if (document.body.classList.contains('dark-mode')) {
+            const avatarPlaceholder = document.querySelector('.avatar-placeholder');
+            if (avatarPlaceholder) {
+                avatarPlaceholder.style.backgroundColor = 'var(--card-bg)';
+            }
+            dropzone.style.backgroundColor = 'var(--card-bg)';
+        }
     });
 </script>
 {% endblock %}

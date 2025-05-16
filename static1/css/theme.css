@@ -6,16 +6,16 @@
 /* Base variables for light mode */
 :root {
     /* Colors */
-    --primary-color: #3498db;
-    --primary-hover: #2980b9;
+    --primary-color: #3b82f6;
+    --primary-hover: #2563eb;
     --secondary-color: #2ecc71;
     --secondary-hover: #27ae60;
     --danger-color: #e74c3c;
     --danger-hover: #c0392b;
     --warning-color: #f39c12;
     --warning-hover: #e67e22;
-    --info-color: #3498db;
-    --info-hover: #2980b9;
+    --info-color: #3b82f6;
+    --info-hover: #2563eb;
     --success-color: #2ecc71;
     --success-hover: #27ae60;
 
@@ -58,15 +58,17 @@
     /* Animations */
     --transition-speed: 0.3s;
     
-    /* Spacing */
-    --space-1: 0.25rem;
-    --space-2: 0.5rem;
-    --space-3: 0.75rem;
-    --space-4: 1rem;
-    --space-6: 1.5rem;
-    --space-8: 2rem;
-    --space-12: 3rem;
-    --space-16: 4rem;
+    /* Spacing (используется более последовательная система) */
+    --space-1: 0.25rem;  /* 4px */
+    --space-2: 0.5rem;   /* 8px */
+    --space-3: 0.75rem;  /* 12px */
+    --space-4: 1rem;     /* 16px */
+    --space-5: 1.25rem;  /* 20px */
+    --space-6: 1.5rem;   /* 24px */
+    --space-8: 2rem;     /* 32px */
+    --space-10: 2.5rem;  /* 40px */
+    --space-12: 3rem;    /* 48px */
+    --space-16: 4rem;    /* 64px */
 }
 
 /* Dark mode overrides */
@@ -112,14 +114,14 @@
     --border-color: #4a5568;
     --border-color-dark: #1a202c;
     
-    /* Shadows */
+    /* Shadows с улучшенным контрастом для темной темы */
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
     --shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.15);
 }
 
-/* Smooth transitions for theme switching */
+/* Unified transitions for smooth theme switching */
 body, button, a, input, select, textarea,
 .card, .form-control, .btn, .modal-content, 
 .form-container, .dropdown-menu, .nav-link,
@@ -134,7 +136,7 @@ h1, h2, h3, h4, h5, h6, p, span, label,
                 transform var(--transition-speed) ease;
 }
 
-/* Common form controls for dark mode */
+/* Common dark mode element styles - сгруппированы для лучшей производительности */
 .dark-mode input, 
 .dark-mode select, 
 .dark-mode textarea {
@@ -143,7 +145,6 @@ h1, h2, h3, h4, h5, h6, p, span, label,
     color: var(--text-color);
 }
 
-/* Common button styles for dark mode */
 .dark-mode .btn-outline {
     color: var(--text-color);
     border-color: var(--border-color);
@@ -154,15 +155,14 @@ h1, h2, h3, h4, h5, h6, p, span, label,
     color: var(--primary-color);
 }
 
-/* Common select fields for dark mode */
-.dark-mode select.form-control,
+/* Оптимизированный селектор для select в темной теме */
 .dark-mode select {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23e2e8f0' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 15px center;
 }
 
-/* Common dark mode container styles */
+/* Оптимизированная группировка для dark mode контейнеров */
 .dark-mode .card,
 .dark-mode .modal-content,
 .dark-mode .dropdown-menu,
@@ -178,14 +178,16 @@ h1, h2, h3, h4, h5, h6, p, span, label,
     border-color: var(--border-color);
 }
 
+/* Оптимизация стилей сообщений для темной темы */
 .dark-mode .auth-message {
     background-color: var(--info-bg);
     color: var(--info-text);
     border-left: 4px solid var(--info-color);
 }
 
-.dark-mode .auth-message i {
-    color: var(--info-color);
+.dark-mode .auth-message i,
+.dark-mode .auth-error i {
+    color: currentColor;
 }
 
 .dark-mode .auth-error {
@@ -194,10 +196,7 @@ h1, h2, h3, h4, h5, h6, p, span, label,
     border-left: 4px solid var(--error-color);
 }
 
-.dark-mode .auth-error i {
-    color: var(--error-color);
-}
-
+/* Оптимизированные стили заголовков блоков для темной темы */
 .dark-mode .info-block-title {
     border-bottom-color: var(--border-color);
 }
@@ -214,7 +213,7 @@ h1, h2, h3, h4, h5, h6, p, span, label,
     border-color: var(--border-color);
 }
 
-/* Common dark mode text color adjustments */
+/* Оптимизированные стили текста для темной темы */
 .dark-mode h1, .dark-mode h2, .dark-mode h3, 
 .dark-mode h4, .dark-mode h5, .dark-mode h6 {
     color: var(--heading-color);
@@ -235,7 +234,7 @@ h1, h2, h3, h4, h5, h6, p, span, label,
     color: var(--text-muted);
 }
 
-/* Ensure all buttons have proper colors in dark mode */
+/* Оптимизированные стили кнопок для темной темы */
 .dark-mode .btn-primary {
     background-color: var(--primary-color);
     color: white;
@@ -254,13 +253,7 @@ h1, h2, h3, h4, h5, h6, p, span, label,
     background-color: var(--danger-hover);
 }
 
-/* Fix error, info, success, and warning colors in dark mode */
-.dark-mode .error-message {
-    background-color: var(--error-bg);
-    color: var(--error-color);
-    border-left-color: var(--danger-color);
-}
-
+/* Оптимизированные стили сообщений для темной темы */
 .dark-mode .message-success {
     background-color: var(--success-bg);
     border-left-color: var(--success-color);
@@ -281,7 +274,7 @@ h1, h2, h3, h4, h5, h6, p, span, label,
     border-left-color: var(--info-color);
 }
 
-/* Dropdown items text color fix */
+/* Оптимизированные стили выпадающих элементов для темной темы */
 .dark-mode .dropdown-item,
 .dark-mode button.dropdown-item {
     color: var(--text-color);
@@ -293,7 +286,7 @@ h1, h2, h3, h4, h5, h6, p, span, label,
     background-color: var(--hover-bg);
 }
 
-/* Fix text in form containers */
+/* Оптимизированные стили форм для темной темы */
 .dark-mode .form-container input,
 .dark-mode .form-container textarea,
 .dark-mode .form-container select {
@@ -306,13 +299,7 @@ h1, h2, h3, h4, h5, h6, p, span, label,
     color: var(--text-color);
 }
 
-/* Chatbot text color fixes */
-.dark-mode .sender,
-.dark-mode .text-bubble {
-    color: inherit;
-}
-
-/* Utility classes for text */
+/* Utility классы для текста */
 .text-primary { color: var(--primary-color); }
 .text-secondary { color: var(--secondary-color); }
 .text-danger { color: var(--danger-color); }
@@ -321,7 +308,7 @@ h1, h2, h3, h4, h5, h6, p, span, label,
 .text-success { color: var(--success-color); }
 .text-muted { color: var(--text-muted); }
 
-/* Utility classes for backgrounds */
+/* Utility классы для фонов */
 .bg-primary { background-color: var(--primary-color); color: var(--text-light); }
 .bg-secondary { background-color: var(--secondary-color); color: var(--text-light); }
 .bg-danger { background-color: var(--danger-color); color: var(--text-light); }

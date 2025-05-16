@@ -50,13 +50,21 @@
                             {{ field }}
                         </div>
                     {% elif field.name == 'avatar' %}
-                        <div class="file-upload-container">
-                            <label for="{{ field.id_for_label }}" class="file-upload-label">
-                                <i class="fas fa-image"></i>
-                                <span>Аватар таңдау</span>
-                            </label>
+                        <div class="avatar-upload-section">
+                            <div id="avatar-preview-container" class="avatar-preview-container" style="display: none;">
+                                <img id="avatar-preview" class="avatar-preview" src="" alt="Preview">
+                            </div>
+                            <div class="avatar-placeholder" id="avatar-placeholder">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="avatar-dropzone" id="avatar-dropzone">
+                                <i class="fas fa-cloud-upload-alt dropzone-icon"></i>
+                                <p class="dropzone-text">Аватарды осында сүйреңіз<br>немесе</p>
+                                <button type="button" class="btn btn-outline avatar-select-btn">
+                                    <i class="fas fa-image"></i> Аватар таңдау
+                                </button>
+                            </div>
                             {{ field }}
-                            <span class="file-name">Файл таңдалмаған</span>
                         </div>
                     {% elif field.name == 'bio' %}
                         {{ field }}
@@ -132,22 +140,232 @@
         font-size: 0.75rem;
         color: #64748b;
     }
+    
+    /* Modern avatar upload styles */
+    .avatar-upload-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 1rem 0;
+        gap: 1rem;
+    }
+    
+    .avatar-preview-container {
+        margin: 0 auto;
+        position: relative;
+        transition: all 0.3s ease;
+    }
+    
+    .avatar-preview {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid var(--primary-color, #3b82f6);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    }
+    
+    .avatar-placeholder {
+        width: 120px;
+        height: 120px;
+        margin: 0 auto;
+        background-color: #f1f5f9;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        color: #94a3b8;
+    }
+    
+    .avatar-dropzone {
+        width: 100%;
+        max-width: 350px;
+        border: 2px dashed #cbd5e1;
+        border-radius: 0.75rem;
+        padding: 1.5rem 1rem;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background-color: #f8fafc;
+    }
+    
+    .avatar-dropzone:hover {
+        border-color: var(--primary-color, #3b82f6);
+        background-color: rgba(59, 130, 246, 0.05);
+    }
+    
+    .dropzone-icon {
+        font-size: 2rem;
+        color: var(--primary-color, #3b82f6);
+        margin-bottom: 0.5rem;
+    }
+    
+    .dropzone-text {
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+        color: #64748b;
+    }
+    
+    .avatar-select-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .btn-outline {
+        background-color: transparent;
+        border: 1px solid #cbd5e1;
+        color: #334155;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-outline:hover {
+        border-color: var(--primary-color, #3b82f6);
+        color: var(--primary-color, #3b82f6);
+    }
+    
+    .avatar-dropzone.dragover {
+        border-color: var(--primary-color, #3b82f6);
+        background-color: rgba(59, 130, 246, 0.1);
+    }
+    
+    /* Dark mode support */
+    .dark-mode .avatar-placeholder {
+        background-color: #1e293b;
+        color: #64748b;
+    }
+    
+    .dark-mode .avatar-dropzone {
+        background-color: #0f172a;
+        border-color: #334155;
+    }
+    
+    .dark-mode .avatar-dropzone:hover {
+        background-color: #1e293b;
+        border-color: var(--primary-color, #3b82f6);
+    }
+    
+    @media (max-width: 768px) {
+        .avatar-upload-section {
+            margin: 0.5rem 0;
+        }
+        
+        .avatar-preview, .avatar-placeholder {
+            width: 100px;
+            height: 100px;
+            font-size: 2.5rem;
+        }
+    }
 </style>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Get DOM elements
         const fileInput = document.querySelector('input[type="file"]');
-        const fileName = document.querySelector('.file-name');
+        const dropzone = document.getElementById('avatar-dropzone');
+        const avatarPlaceholder = document.getElementById('avatar-placeholder');
+        const previewContainer = document.getElementById('avatar-preview-container');
+        const previewImg = document.getElementById('avatar-preview');
+        const avatarSelectBtn = document.querySelector('.avatar-select-btn');
         
-        if (fileInput) {
-            fileInput.addEventListener('change', function() {
-                if (this.files && this.files.length > 0) {
-                    fileName.textContent = this.files[0].name;
-                } else {
-                    fileName.textContent = 'Файл таңдалмаған';
+        // Handle file selection
+        fileInput.addEventListener('change', function() {
+            if (this.files && this.files.length > 0) {
+                const file = this.files[0];
+                
+                // Check if file is an image
+                if (!file.type.match('image.*')) {
+                    alert('Тек қана сурет файлдарын таңдаңыз.');
+                    return;
                 }
+                
+                // Check file size (max 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('Файл өлшемі 5MB аспауы керек.');
+                    return;
+                }
+                
+                // Show preview
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // Hide placeholder
+                    if (avatarPlaceholder) avatarPlaceholder.style.display = 'none';
+                    
+                    // Show preview
+                    previewImg.src = e.target.result;
+                    previewContainer.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // Open file dialog when clicking the select button
+        if (avatarSelectBtn) {
+            avatarSelectBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                fileInput.click();
             });
         }
+        
+        // Handle drag and drop
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropzone.addEventListener(eventName, preventDefaults, false);
+        });
+        
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropzone.addEventListener(eventName, highlight, false);
+        });
+        
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropzone.addEventListener(eventName, unhighlight, false);
+        });
+        
+        function highlight() {
+            dropzone.classList.add('dragover');
+        }
+        
+        function unhighlight() {
+            dropzone.classList.remove('dragover');
+        }
+        
+        dropzone.addEventListener('drop', handleDrop, false);
+        
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            
+            if (files.length > 0) {
+                fileInput.files = files;
+                const event = new Event('change');
+                fileInput.dispatchEvent(event);
+            }
+        }
+        
+        // Check if dark mode is active
+        function checkDarkMode() {
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            if (isDarkMode) {
+                if (avatarPlaceholder) {
+                    avatarPlaceholder.style.backgroundColor = '#1e293b';
+                }
+                if (dropzone) {
+                    dropzone.style.backgroundColor = '#0f172a';
+                }
+            }
+        }
+        
+        // Initial dark mode check
+        checkDarkMode();
+        
+        // Listen for theme changes
+        document.addEventListener('themeChanged', function(event) {
+            checkDarkMode();
+        });
     });
 </script>
 {% endblock %}
