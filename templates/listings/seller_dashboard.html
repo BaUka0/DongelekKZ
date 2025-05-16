@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Менің жарнамаларым | Dongelek{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/seller_dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1>Менің жарнамаларым</h1>
+        <div class="dashboard-actions">
+            <a href="{% url 'car_create' %}" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Жаңа жарнама қосу
+            </a>
+        </div>
+    </div>
+    
+    <div class="dashboard-summary">
+        <div class="summary-card">
+            <div class="summary-icon">
+                <i class="fas fa-car"></i>
+            </div>
+            <div class="summary-info">
+                <h3>{{ total_listings }}</h3>
+                <p>Жалпы жарнамалар</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="dashboard-content">
+        {% if cars %}
+            <div class="table-container">
+                <table class="car-listings-table">
+                    <thead>
+                        <tr>
+                            <th>Фото</th>
+                            <th>Автокөлік</th>
+                            <th>Баға</th>
+                            <th>Жариялау күні</th>
+                            <th>Әрекеттер</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for car in cars %}
+                        <tr>
+                            <td class="car-image-cell">
+                                <a href="{{ car.get_absolute_url }}">
+                                    <img src="{{ car.image.url }}" alt="{{ car }}" class="car-thumbnail">
+                                </a>
+                            </td>
+                            <td>
+                                <div class="car-info">
+                                    <a href="{{ car.get_absolute_url }}" class="car-title">{{ car }}</a>
+                                    <div class="car-meta">
+                                        <span><i class="fas fa-calendar-alt"></i> {{ car.year }} ж.</span>
+                                        <span><i class="fas fa-tachometer-alt"></i> {{ car.mileage }} км</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="car-price">{{ car.price_display }}</td>
+                            <td>{{ car.created_at|date:"d.m.Y" }}</td>
+                            <td>
+                                <div class="car-actions">
+                                    <a href="{{ car.get_absolute_url }}" class="btn-action btn-view" title="Көру">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="{% url 'car_update' car.pk %}" class="btn-action btn-edit" title="Өзгерту">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="{% url 'car_delete' car.pk %}" class="btn-action btn-delete" title="Жою">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            
+            {% if is_paginated %}
+                {% include 'pagination.html' %}
+            {% endif %}
+        {% else %}
+            <div class="no-listings">
+                <div class="no-listings-content">
+                    <div class="no-listings-icon">
+                        <i class="fas fa-car-side"></i>
+                    </div>
+                    <h3>Сізде әлі жарнамалар жоқ</h3>
+                    <p>Автокөлік сату үшін жаңа жарнама қосыңыз</p>
+                    <a href="{% url 'car_create' %}" class="btn btn-primary">
+                        <i class="fas fa-plus-circle"></i> Жарнама қосу
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

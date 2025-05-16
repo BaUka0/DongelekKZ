@@ -1,0 +1,255 @@
+/**
+ * Seller Dashboard Styles
+ */
+
+/* Dashboard Header */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.dashboard-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+/* Summary Cards */
+.dashboard-summary {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.summary-card {
+    background-color: var(--card-bg);
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 200px;
+    border: 1px solid var(--border-color);
+}
+
+.summary-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    background-color: var(--primary-color);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-right: 1rem;
+}
+
+.summary-info h3 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--heading-color);
+    margin: 0 0 0.25rem 0;
+}
+
+.summary-info p {
+    color: var(--text-muted);
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+/* Table Styling */
+.dashboard-content {
+    background-color: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
+    overflow: hidden;
+}
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.car-listings-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.car-listings-table th,
+.car-listings-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.car-listings-table th {
+    background-color: var(--hover-bg);
+    color: var(--heading-color);
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.car-listings-table tr:hover {
+    background-color: var(--hover-bg);
+}
+
+.car-image-cell {
+    width: 80px;
+}
+
+.car-thumbnail {
+    width: 80px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.car-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.car-title {
+    color: var(--heading-color);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    text-decoration: none;
+}
+
+.car-title:hover {
+    color: var(--primary-color);
+}
+
+.car-meta {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    display: flex;
+    gap: 1rem;
+}
+
+.car-meta span {
+    display: flex;
+    align-items: center;
+}
+
+.car-meta i {
+    margin-right: 0.25rem;
+}
+
+.car-price {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.car-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn-action {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.btn-view {
+    background-color: var(--info-color);
+}
+
+.btn-edit {
+    background-color: var(--warning-color);
+}
+
+.btn-delete {
+    background-color: var(--danger-color);
+}
+
+.btn-view:hover {
+    background-color: var(--info-hover);
+}
+
+.btn-edit:hover {
+    background-color: var(--warning-hover);
+}
+
+.btn-delete:hover {
+    background-color: var(--danger-hover);
+}
+
+/* No Listings */
+.no-listings {
+    padding: 3rem 1rem;
+    text-align: center;
+}
+
+.no-listings-content {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.no-listings-icon {
+    font-size: 3rem;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+}
+
+.no-listings h3 {
+    font-size: 1.5rem;
+    color: var(--heading-color);
+    margin-bottom: 0.5rem;
+}
+
+.no-listings p {
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    
+    .car-listings-table th:nth-child(4),
+    .car-listings-table td:nth-child(4) {
+        display: none;
+    }
+}
+
+@media (max-width: 576px) {
+    .car-listings-table {
+        font-size: 0.9rem;
+    }
+    
+    .car-listings-table th,
+    .car-listings-table td {
+        padding: 0.75rem 0.5rem;
+    }
+    
+    .car-image-cell {
+        width: 60px;
+    }
+    
+    .car-thumbnail {
+        width: 60px;
+        height: 45px;
+    }
+    
+    .btn-action {
+        width: 30px;
+        height: 30px;
+        font-size: 0.8rem;
+    }
+}
