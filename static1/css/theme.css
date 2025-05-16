@@ -1,5 +1,6 @@
 /**
  * Global theme definitions for light/dark mode
+ * This is the foundation file that defines global variables used across the site
  */
 
 /* Base variables for light mode */
@@ -10,9 +11,13 @@
     --secondary-color: #2ecc71;
     --secondary-hover: #27ae60;
     --danger-color: #e74c3c;
+    --danger-hover: #c0392b;
     --warning-color: #f39c12;
+    --warning-hover: #e67e22;
     --info-color: #3498db;
+    --info-hover: #2980b9;
     --success-color: #2ecc71;
+    --success-hover: #27ae60;
 
     /* Text */
     --text-color: #333333;
@@ -34,9 +39,9 @@
     
     /* Status colors text */
     --error-color: #e53e3e;
-    --warning-color: #b45309;
-    --info-color: #3182ce;
-    --success-color: #155724;
+    --warning-text: #b45309;
+    --info-text: #3182ce;
+    --success-text: #155724;
     
     /* Borders */
     --border-color: #e2e8f0;
@@ -52,6 +57,16 @@
     
     /* Animations */
     --transition-speed: 0.3s;
+    
+    /* Spacing */
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-6: 1.5rem;
+    --space-8: 2rem;
+    --space-12: 3rem;
+    --space-16: 4rem;
 }
 
 /* Dark mode overrides */
@@ -62,9 +77,13 @@
     --secondary-color: #10b981;
     --secondary-hover: #059669;
     --danger-color: #f87171;
+    --danger-hover: #ef4444;
     --warning-color: #fbbf24;
+    --warning-hover: #f59e0b;
     --info-color: #60a5fa;
+    --info-hover: #3b82f6;
     --success-color: #34d399;
+    --success-hover: #10b981;
 
     /* Text */
     --text-color: #e2e8f0;
@@ -85,9 +104,9 @@
     
     /* Status colors text */
     --error-color: #f87171;
-    --warning-color: #fbbf24;
-    --info-color: #60a5fa;
-    --success-color: #6ee7b7;
+    --warning-text: #fbbf24;
+    --info-text: #60a5fa;
+    --success-text: #6ee7b7;
     
     /* Borders */
     --border-color: #4a5568;
@@ -103,14 +122,19 @@
 /* Smooth transitions for theme switching */
 body, button, a, input, select, textarea,
 .card, .form-control, .btn, .modal-content, 
-.form-container, .dropdown-menu, .nav-link {
+.form-container, .dropdown-menu, .nav-link,
+.car-item, .car-image img, .message,
+h1, h2, h3, h4, h5, h6, p, span, label, 
+.info-value, .car-detail, .car-meta, .car-seller,
+.car-price-tag, .auth-title, .auth-subtitle {
     transition: background-color var(--transition-speed) ease, 
                 color var(--transition-speed) ease, 
                 border-color var(--transition-speed) ease, 
-                box-shadow var(--transition-speed) ease;
+                box-shadow var(--transition-speed) ease,
+                transform var(--transition-speed) ease;
 }
 
-/* Dark mode form controls */
+/* Common form controls for dark mode */
 .dark-mode input, 
 .dark-mode select, 
 .dark-mode textarea {
@@ -119,7 +143,7 @@ body, button, a, input, select, textarea,
     color: var(--text-color);
 }
 
-/* Dark mode buttons */
+/* Common button styles for dark mode */
 .dark-mode .btn-outline {
     color: var(--text-color);
     border-color: var(--border-color);
@@ -127,20 +151,180 @@ body, button, a, input, select, textarea,
 
 .dark-mode .btn-outline:hover {
     background-color: var(--hover-bg);
+    color: var(--primary-color);
 }
 
-/* Dark mode select fields */
-.dark-mode select.form-control {
+/* Common select fields for dark mode */
+.dark-mode select.form-control,
+.dark-mode select {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23e2e8f0' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 15px center;
 }
 
-/* Dark mode cards and containers */
+/* Common dark mode container styles */
 .dark-mode .card,
 .dark-mode .modal-content,
 .dark-mode .dropdown-menu,
-.dark-mode .form-container {
+.dark-mode .form-container,
+.dark-mode .search-container,
+.dark-mode .sidebar-section,
+.dark-mode .catalog-header,
+.dark-mode .auth-container,
+.dark-mode .info-block,
+.dark-mode .car-main-image,
+.dark-mode .car-details-container {
     background-color: var(--card-bg);
     border-color: var(--border-color);
 }
+
+.dark-mode .auth-message {
+    background-color: var(--info-bg);
+    color: var(--info-text);
+    border-left: 4px solid var(--info-color);
+}
+
+.dark-mode .auth-message i {
+    color: var(--info-color);
+}
+
+.dark-mode .auth-error {
+    background-color: var(--error-bg);
+    color: var(--error-color);
+    border-left: 4px solid var(--error-color);
+}
+
+.dark-mode .auth-error i {
+    color: var(--error-color);
+}
+
+.dark-mode .info-block-title {
+    border-bottom-color: var(--border-color);
+}
+
+.dark-mode .car-title a,
+.dark-mode .info-block-title,
+.dark-mode .car-details-title,
+.dark-mode .auth-title {
+    color: var(--heading-color);
+}
+
+.dark-mode .car-actions,
+.dark-mode .info-block {
+    border-color: var(--border-color);
+}
+
+/* Common dark mode text color adjustments */
+.dark-mode h1, .dark-mode h2, .dark-mode h3, 
+.dark-mode h4, .dark-mode h5, .dark-mode h6 {
+    color: var(--heading-color);
+}
+
+.dark-mode p, .dark-mode span, .dark-mode label, 
+.dark-mode .car-detail, .dark-mode .car-description,
+.dark-mode .auth-subtitle, .dark-mode .form-label,
+.dark-mode .car-meta, .dark-mode .car-seller,
+.dark-mode .info-value, .dark-mode .help-text {
+    color: var(--text-color);
+}
+
+.dark-mode .text-muted,
+.dark-mode .info-label,
+.dark-mode .car-meta,
+.dark-mode .car-seller {
+    color: var(--text-muted);
+}
+
+/* Ensure all buttons have proper colors in dark mode */
+.dark-mode .btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.dark-mode .btn-primary:hover {
+    background-color: var(--primary-hover);
+}
+
+.dark-mode .btn-danger {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+.dark-mode .btn-danger:hover {
+    background-color: var(--danger-hover);
+}
+
+/* Fix error, info, success, and warning colors in dark mode */
+.dark-mode .error-message {
+    background-color: var(--error-bg);
+    color: var(--error-color);
+    border-left-color: var(--danger-color);
+}
+
+.dark-mode .message-success {
+    background-color: var(--success-bg);
+    border-left-color: var(--success-color);
+}
+
+.dark-mode .message-error {
+    background-color: var(--error-bg);
+    border-left-color: var(--danger-color);
+}
+
+.dark-mode .message-warning {
+    background-color: var(--warning-bg);
+    border-left-color: var(--warning-color);
+}
+
+.dark-mode .message-info {
+    background-color: var(--info-bg);
+    border-left-color: var(--info-color);
+}
+
+/* Dropdown items text color fix */
+.dark-mode .dropdown-item,
+.dark-mode button.dropdown-item {
+    color: var(--text-color);
+}
+
+.dark-mode .dropdown-item:hover,
+.dark-mode button.dropdown-item:hover {
+    color: var(--primary-color);
+    background-color: var(--hover-bg);
+}
+
+/* Fix text in form containers */
+.dark-mode .form-container input,
+.dark-mode .form-container textarea,
+.dark-mode .form-container select {
+    color: var(--text-color);
+    background-color: var(--input-bg);
+    border-color: var(--border-color);
+}
+
+.dark-mode .form-container label {
+    color: var(--text-color);
+}
+
+/* Chatbot text color fixes */
+.dark-mode .sender,
+.dark-mode .text-bubble {
+    color: inherit;
+}
+
+/* Utility classes for text */
+.text-primary { color: var(--primary-color); }
+.text-secondary { color: var(--secondary-color); }
+.text-danger { color: var(--danger-color); }
+.text-warning { color: var(--warning-color); }
+.text-info { color: var(--info-color); }
+.text-success { color: var(--success-color); }
+.text-muted { color: var(--text-muted); }
+
+/* Utility classes for backgrounds */
+.bg-primary { background-color: var(--primary-color); color: var(--text-light); }
+.bg-secondary { background-color: var(--secondary-color); color: var(--text-light); }
+.bg-danger { background-color: var(--danger-color); color: var(--text-light); }
+.bg-warning { background-color: var(--warning-color); color: var(--text-light); }
+.bg-info { background-color: var(--info-color); color: var(--text-light); }
+.bg-success { background-color: var(--success-color); color: var(--text-light); }

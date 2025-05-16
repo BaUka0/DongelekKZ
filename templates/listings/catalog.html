@@ -71,19 +71,26 @@
             </div>
             
             {% if cars %}
-            <div class="car-grid">
+            <div class="cars-container">
                 {% for car in cars %}
-                <div class="car-card">
+                <div class="car-item">
                     <div class="car-image">
                         <a href="{{ car.get_absolute_url }}">
                             <img src="{{ car.image.url }}" alt="{{ car }}">
                         </a>
+                        <div class="car-price">{{ car.price_display }}</div>
                     </div>
-                    <div class="car-details">
-                        <h3><a href="{{ car.get_absolute_url }}">{{ car }}</a></h3>
-                        <p class="car-price">{{ car.price_display }}</p>
-                        <p class="car-meta">{{ car.year }} ж., {{ car.mileage }} км</p>
-                        <a href="{{ car.get_absolute_url }}" class="btn btn-outline btn-sm">Толығырақ</a>
+                    <div class="car-info">
+                        <h3 class="car-title">
+                            <a href="{{ car.get_absolute_url }}">{{ car }}</a>
+                        </h3>
+                        <div class="car-meta">
+                            <span class="car-year"><i class="fas fa-calendar-alt"></i> {{ car.year }} ж.</span>
+                            <span class="car-mileage"><i class="fas fa-tachometer-alt"></i> {{ car.mileage }} км</span>
+                        </div>
+                        <p class="car-seller">
+                            <i class="fas fa-user"></i> {{ car.seller.username }}
+                        </p>
                     </div>
                 </div>
                 {% endfor %}
@@ -104,18 +111,18 @@
 
 {% block extra_js %}
 <script>
-    // Сұрыптау өзгерісін өңдеу
+    // Handle sorting change
     document.addEventListener('DOMContentLoaded', function() {
         const sortSelect = document.getElementById('sort');
         
         sortSelect.addEventListener('change', function() {
-            // Ағымдағы URL мен параметрлерді алу
+            // Get current URL and parameters
             const urlParams = new URLSearchParams(window.location.search);
             
-            // Сұрыптау параметрін жаңарту немесе қосу
+            // Update or add the sort parameter
             urlParams.set('sort', this.value);
             
-            // Жаңа URL-ге өту
+            // Navigate to the new URL
             window.location.href = window.location.pathname + '?' + urlParams.toString();
         });
     });

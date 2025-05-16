@@ -78,19 +78,26 @@
         </div>
         
         {% if cars %}
-        <div class="car-grid">
+        <div class="cars-container">
             {% for car in cars %}
-            <div class="car-card">
+            <div class="car-item">
                 <div class="car-image">
                     <a href="{{ car.get_absolute_url }}">
                         <img src="{{ car.image.url }}" alt="{{ car }}">
                     </a>
+                    <div class="car-price">{{ car.price_display }}</div>
                 </div>
-                <div class="car-details">
-                    <h3><a href="{{ car.get_absolute_url }}">{{ car }}</a></h3>
-                    <p class="car-price">{{ car.price_display }}</p>
-                    <p class="car-meta">{{ car.year }} ж., {{ car.mileage }} км</p>
-                    <a href="{{ car.get_absolute_url }}" class="btn btn-outline btn-sm">Толығырақ</a>
+                <div class="car-info">
+                    <h3 class="car-title">
+                        <a href="{{ car.get_absolute_url }}">{{ car }}</a>
+                    </h3>
+                    <div class="car-meta">
+                        <span class="car-year"><i class="fas fa-calendar-alt"></i> {{ car.year }} ж.</span>
+                        <span class="car-mileage"><i class="fas fa-tachometer-alt"></i> {{ car.mileage }} км</span>
+                    </div>
+                    <p class="car-seller">
+                        <i class="fas fa-user"></i> {{ car.seller.username }}
+                    </p>
                 </div>
             </div>
             {% endfor %}
@@ -110,27 +117,32 @@
 
 {% block extra_js %}
 <script>
-    // Бренд өзгерген кезде модельдерді динамикалық сүзу
+    // Dynamic model filtering when brand changes
     document.addEventListener('DOMContentLoaded', function() {
         const brandSelect = document.getElementById('brand');
         const modelSelect = document.getElementById('model');
-        const models = {{ models|safe }};
         
         brandSelect.addEventListener('change', function() {
             const brandId = this.value;
             
-            // Ағымдағы опцияларды тазалау
+            // Clear current options
             modelSelect.innerHTML = '<option value="">Барлық модельдер</option>';
             
             if (brandId) {
-                // Бренд бойынша модельдерді сүзіп, оларды қосу
-                const filteredModels = models.filter(model => model.brand_id == brandId);
-                filteredModels.forEach(model => {
-                    const option = document.createElement('option');
-                    option.value = model.id;
-                    option.textContent = model.name;
-                    modelSelect.appendChild(option);
-                });
+                // Fetch models for selected brand
+                fetch(`/api/models/?brand=${brandId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        data.forEach(model => {
+                            const option = document.createElement('option');
+                            option.value = model.id;
+                            option.textContent = model.name;
+                            modelSelect.appendChild(option);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Модельдерді жүктеу кезіндегі қате:', error);
+                    });
             }
         });
     });

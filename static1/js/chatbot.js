@@ -33,9 +33,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Check if Web Speech API is supported by the browser
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    const SpeechGrammarList = window.SpeechGrammarList || window.webkitSpeechGrammarList;
-    const SpeechRecognitionEvent = window.SpeechRecognitionEvent || window.webkitSpeechRecognitionEvent;
-    
     const isSpeechRecognitionSupported = Boolean(SpeechRecognition);
     const voiceButton = document.getElementById('chatbot-voice-button');
     
@@ -173,26 +170,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (toggleButton) {
-        console.log("Adding click listener to toggle button");
-        console.log("Initial widget display:", chatbotWidget ? chatbotWidget.style.display : 'widget not found');
-        
         toggleButton.addEventListener('click', () => {
-            console.log("Toggle button clicked");
             if (!chatbotWidget) {
                 console.error("Widget not found on click");
                 return;
             }
             
             const isVisible = chatbotWidget.style.display === 'flex';
-            console.log("Is visible:", isVisible);
             
             if (isVisible) {
                 chatbotWidget.style.display = 'none';
-                console.log("Setting display to none");
             } else {
                 chatbotWidget.style.display = 'flex';
-                console.log("Setting display to flex");
-                
                 loadHistory();
                 messageInput.focus();
             }
@@ -249,7 +238,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
         } catch (error) {
-
             console.error('Ошибка при отправке/получении сообщения:', error);
             addMessageToChat('bot', `${error.message || 'Произошла неизвестная ошибка.'}`, null);
         } finally {
@@ -292,10 +280,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Initialize Web Speech API for voice recognition if supported
     if (isSpeechRecognitionSupported && voiceButton) {
         const recognition = new SpeechRecognition();
         recognition.continuous = false;
-        recognition.lang = 'kk-KZ'; // Set language to Russian
+        recognition.lang = 'kk-KZ, ru-RU'; // Support for Kazakh and Russian languages
         recognition.interimResults = false;
         recognition.maxAlternatives = 1;
         

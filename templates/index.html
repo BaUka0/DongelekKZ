@@ -1,189 +1,142 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Dongelek - Автокөлік сату және сатып алу{% endblock %}
+{% block title %}Dongelek - Автокөлік сату және сатып алу сайты{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
+{% endblock %}
 
 {% block content %}
+<!-- Hero Section -->
 <section class="hero">
-    <div class="hero-content">
-        <h1 class="hero-title">Dongelek платформасына қош келдіңіз</h1>
-        <p class="hero-subtitle">Сенімді автокөліктерді сату және сатып алу</p>
-        
-        {% if user.is_authenticated and user.is_seller %}
-            <a href="{% url 'car_create' %}" class="btn btn-primary btn-lg">
-                <i class="fas fa-plus-circle"></i> Жаңа жариялау қосу
-            </a>
-        {% else %}
-            <a href="{% url 'index' %}#cars" class="btn btn-primary btn-lg">
-                <i class="fas fa-search"></i> Көліктерді қарау
-            </a>
-        {% endif %}
-    </div>
-</section>
-
-<section class="cars-section" id="cars">
     <div class="container">
-        <div class="section-header">
-            <h2 class="section-title">Қол жетімді автокөліктер</h2>
-            {% if user.is_authenticated and user.is_seller %}
-                <a href="{% url 'car_create' %}" class="btn btn-outline">
-                    <i class="fas fa-plus"></i> Жариялау қосу
+        <div class="hero-content">
+            <h1 class="hero-title">Автокөлік платформасына қош келдіңіз</h1>
+            <p class="hero-subtitle">Сенімді автокөліктерді сату және сатып алу</p>
+            <div class="hero-buttons">
+                <a href="{% url 'catalog' %}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-search"></i> Автокөлік табу
                 </a>
-            {% endif %}
-        </div>
-
-        {% if cars %}
-            <div class="car-grid">
-                {% for car in cars %}
-                    <div class="car-card">
-                        <div class="car-card-image">
-                            {% if car.image %}
-                                <a href="{{ car.get_absolute_url }}">
-                                    <img src="{{ car.image.url }}" alt="{{ car.brand }} {{ car.model }}">
-                                </a>
-                            {% else %}
-                                <a href="{{ car.get_absolute_url }}">
-                                    <img src="{% static 'images/placeholder.png' %}" alt="Сурет жоқ">
-                                </a>
-                            {% endif %}
-                            <div class="car-price">${{ car.price }}</div>
-                        </div>
-                        
-                        <div class="car-card-content">
-                            <h3 class="car-title">
-                                <a href="{{ car.get_absolute_url }}">{{ car.brand }} {{ car.model }}</a>
-                            </h3>
-                            
-                            <div class="car-details">
-                                <div class="car-detail">
-                                    <i class="fas fa-calendar-alt"></i>
-                                    <span>{{ car.year }}</span>
-                                </div>
-                                <div class="car-detail">
-                                    <i class="fas fa-road"></i>
-                                    <span>{{ car.mileage }} км</span>
-                                </div>
-                                <div class="car-detail">
-                                    <i class="fas fa-user"></i>
-                                    <span>{{ car.seller.username }}</span>
-                                </div>
-                            </div>
-                            
-                            <div class="car-actions">
-                                <a href="{{ car.get_absolute_url }}" class="btn btn-outline btn-sm">
-                                    <i class="fas fa-info-circle"></i> Толығырақ
-                                </a>
-                                
-                                {% if user.is_authenticated %}
-                                    {% if car.seller == user or user.is_admin %}
-                                        <div class="car-admin-actions">
-                                            <a href="{% url 'car_update' car.pk %}" class="btn btn-sm btn-warning">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-                                            <a href="{% url 'car_delete' car.pk %}" class="btn btn-sm btn-danger">
-                                                <i class="fas fa-trash"></i>
-                                            </a>
-                                        </div>
-                                    {% endif %}
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
-
-            {% if is_paginated %}
-                <div class="pagination">
-                    <div class="pagination-container">
-                        {% if page_obj.has_previous %}
-                            <a href="?page=1" class="pagination-link">
-                                <i class="fas fa-angle-double-left"></i>
-                            </a>
-                            <a href="?page={{ page_obj.previous_page_number }}" class="pagination-link">
-                                <i class="fas fa-angle-left"></i>
-                            </a>
-                        {% endif %}
-
-                        <div class="pagination-current">
-                            {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}
-                        </div>
-
-                        {% if page_obj.has_next %}
-                            <a href="?page={{ page_obj.next_page_number }}" class="pagination-link">
-                                <i class="fas fa-angle-right"></i>
-                            </a>
-                            <a href="?page={{ page_obj.paginator.num_pages }}" class="pagination-link">
-                                <i class="fas fa-angle-double-right"></i>
-                            </a>
-                        {% endif %}
-                    </div>
-                </div>
-            {% endif %}
-        {% else %}
-            <div class="no-results">
-                <div class="no-results-icon">
-                    <i class="fas fa-car-crash"></i>
-                </div>
-                <h3>Әзірге жарияланған көліктер жоқ.</h3>
                 {% if user.is_authenticated and user.is_seller %}
-                    <p>Бірінші болып көлікті жариялаңыз!</p>
-                    <a href="{% url 'car_create' %}" class="btn btn-primary">
-                        <i class="fas fa-plus"></i> Жаңа жариялау қосу
+                    <a href="{% url 'car_create' %}" class="btn btn-outline btn-lg">
+                        <i class="fas fa-plus-circle"></i> Жарнама қосу
+                    </a>
+                {% else %}
+                    <a href="{% url 'signup' %}" class="btn btn-outline btn-lg">
+                        <i class="fas fa-user-plus"></i> Тіркелу
                     </a>
                 {% endif %}
             </div>
-        {% endif %}
+        </div>
     </div>
 </section>
 
-<style>
-    .section-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 2rem;
-    }
-    
-    .section-title {
-        font-size: 1.8rem;
-        font-weight: 600;
-        color: #1e293b;
-        margin-bottom: 0;
-    }
-    
-    .no-results {
-        text-align: center;
-        padding: 4rem 0;
-        background-color: #ffffff;
-        border-radius: 0.75rem;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-        margin-bottom: 2rem;
-    }
-    
-    .no-results-icon {
-        font-size: 5rem;
-        color: #cbd5e1;
-        margin-bottom: 1.5rem;
-    }
-    
-    .no-results h3 {
-        font-size: 1.5rem;
-        margin-bottom: 1rem;
-        color: #1e293b;
-    }
-    
-    .no-results p {
-        margin-bottom: 1.5rem;
-        color: #64748b;
-        font-size: 1.1rem;
-    }
-    
-    @media (max-width: 768px) {
-        .section-header {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 1rem;
-        }
-    }
-</style>
+<!-- Featured Listings -->
+<section class="featured-section">
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Ұсынылған автокөліктер</h2>
+            <a href="{% url 'catalog' %}" class="btn btn-outline">
+                <i class="fas fa-list"></i> Барлығын көру
+            </a>
+        </div>
+        
+        <div class="cars-container">
+            {% for car in cars %}
+            <div class="car-item">
+                <div class="car-image">
+                    <a href="{{ car.get_absolute_url }}">
+                        <img src="{{ car.image.url }}" alt="{{ car }}">
+                    </a>
+                    <div class="car-price">{{ car.price_display }}</div>
+                </div>
+                <div class="car-info">
+                    <h3 class="car-title">
+                        <a href="{{ car.get_absolute_url }}">{{ car }}</a>
+                    </h3>
+                    <div class="car-meta">
+                        <span class="car-year"><i class="fas fa-calendar-alt"></i> {{ car.year }} ж.</span>
+                        <span class="car-mileage"><i class="fas fa-tachometer-alt"></i> {{ car.mileage }} км</span>
+                    </div>
+                    <p class="car-seller">
+                        <i class="fas fa-user"></i> {{ car.seller.username }}
+                    </p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section class="how-it-works">
+    <div class="container">
+        <h2 class="section-title text-center">Қалай жұмыс істейді?</h2>
+        
+        <div class="steps-container">
+            <div class="step-item">
+                <div class="step-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+                <h3 class="step-title">Іздеу және табу</h3>
+                <p class="step-description">
+                    Біздің каталогтан өз параметрлеріңізге сәйкес келетін автокөлікті табыңыз
+                </p>
+            </div>
+            
+            <div class="step-item">
+                <div class="step-icon">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <h3 class="step-title">Байланысу</h3>
+                <p class="step-description">
+                    Автокөлік иесімен тікелей байланысып, кездесу ұйымдастырыңыз
+                </p>
+            </div>
+            
+            <div class="step-item">
+                <div class="step-icon">
+                    <i class="fas fa-handshake"></i>
+                </div>
+                <h3 class="step-title">Келісім жасау</h3>
+                <p class="step-description">
+                    Автокөлікті тексеріп, келісім жасаңыз және документтерді рәсімдеңіз
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="container">
+        <div class="cta-content">
+            <h2 class="cta-title">Автокөлігіңізді жылдам сатқыңыз келе ме?</h2>
+            <p class="cta-text">
+                Тіркеліп, автокөлігіңізді миллиондаған потенциалды сатып алушыларға көрсетіңіз. 
+                Біздің платформа - автокөлік нарығындағы сенімді серіктес.
+            </p>
+            <div class="cta-buttons">
+                {% if user.is_authenticated and user.is_seller %}
+                    <a href="{% url 'car_create' %}" class="btn btn-light btn-lg">
+                        <i class="fas fa-plus-circle"></i> Автокөлікті сатуға қою
+                    </a>
+                {% else %}
+                    <a href="{% url 'signup' %}" class="btn btn-light btn-lg">
+                        <i class="fas fa-user-plus"></i> Тіркелу
+                    </a>
+                    <a href="{% url 'login' %}" class="btn btn-outline btn-lg btn-light-outline">
+                        <i class="fas fa-sign-in-alt"></i> Кіру
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+{% if page_obj.has_other_pages %}
+    {% include 'pagination.html' %}
+{% endif %}
+
 {% endblock %}

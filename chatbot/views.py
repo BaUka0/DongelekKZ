@@ -60,6 +60,7 @@ def get_response(request):
 
         return JsonResponse({
             "response": bot_response_text,
+            "bot_timestamp": timezone.localtime(bot_msg.timestamp).strftime('%H:%M')
         })
 
     except json.JSONDecodeError:

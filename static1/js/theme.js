@@ -1,5 +1,5 @@
 /**
- * Theme handling script for toggling between light and dark mode
+ * Theme handling for light/dark mode switching
  */
 document.addEventListener('DOMContentLoaded', () => {
     // Theme toggler with improved transition
@@ -18,6 +18,31 @@ document.addEventListener('DOMContentLoaded', () => {
             mainNav.style.backgroundColor = '#1e293b';
             mainNav.style.borderTopColor = '#334155';
         }
+        
+        // Apply text colors if dark mode is active on page load
+        const textElements = document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, span, label, .car-title a, .info-value, .car-detail, .car-meta, .car-seller');
+        
+        textElements.forEach(element => {
+            if (element.classList.contains('heading') || 
+                element.tagName.match(/^H[1-6]$/)) {
+                element.style.color = 'var(--heading-color)';
+            } 
+            else if (element.classList.contains('text-muted') ||
+                     element.classList.contains('car-meta') ||
+                     element.classList.contains('car-seller') ||
+                     element.classList.contains('info-label')) {
+                element.style.color = 'var(--text-muted)';
+            }
+            else {
+                element.style.color = 'var(--text-color)';
+            }
+        });
+        
+        // Fix car title links specifically
+        const carTitleLinks = document.querySelectorAll('.car-title a');
+        carTitleLinks.forEach(link => {
+            link.style.color = 'var(--heading-color)';
+        });
     }
     
     // Theme toggle with event dispatching
@@ -44,9 +69,45 @@ document.addEventListener('DOMContentLoaded', () => {
             themeIcon.classList.replace('fa-sun', 'fa-moon');
         }
         
-        // Dispatch event so other scripts can react to theme change
-        const event = new CustomEvent('themeChange', { 
-            detail: { theme: isDarkMode ? 'dark' : 'light' } 
+        // Fix color transitions for text elements that might not update properly
+        const textElements = document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, span, label, .car-title a, .info-value, .car-detail, .car-meta, .car-seller');
+        
+        textElements.forEach(element => {
+            // Force a repaint to ensure color transition applies
+            element.style.transition = 'none';
+            element.offsetHeight; // Trigger a reflow
+            element.style.transition = '';
+            
+            // Apply appropriate color based on theme
+            if (isDarkMode) {
+                if (element.classList.contains('heading') || 
+                    element.tagName.match(/^H[1-6]$/)) {
+                    element.style.color = 'var(--heading-color)';
+                } 
+                else if (element.classList.contains('text-muted') ||
+                         element.classList.contains('car-meta') ||
+                         element.classList.contains('car-seller') ||
+                         element.classList.contains('info-label')) {
+                    element.style.color = 'var(--text-muted)';
+                }
+                else {
+                    element.style.color = 'var(--text-color)';
+                }
+            } else {
+                // Reset to default theme colors
+                element.style.color = '';
+            }
+        });
+        
+        // Fix car title links specifically
+        const carTitleLinks = document.querySelectorAll('.car-title a');
+        carTitleLinks.forEach(link => {
+            link.style.color = isDarkMode ? 'var(--heading-color)' : '';
+        });
+        
+        // Dispatch event for other scripts that might need to react
+        const event = new CustomEvent('themeChanged', {
+            detail: { theme: isDarkMode ? 'dark' : 'light' }
         });
         document.dispatchEvent(event);
     });
