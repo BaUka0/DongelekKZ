@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Автокөлік каталогы - Dongelek{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1>
+            {% if current_brand %}
+            {{ current_brand }} - Каталог
+            {% else %}
+            Автокөлік каталогы
+            {% endif %}
+        </h1>
+    </div>
+    
+    <div class="catalog-container">
+        <div class="catalog-sidebar">
+            <div class="sidebar-section">
+                <h3>Брендтер</h3>
+                <ul class="brand-list">
+                    <li {% if not current_brand %}class="active"{% endif %}>
+                        <a href="{% url 'catalog' %}">Барлық брендтер</a>
+                    </li>
+                    {% for brand in brands %}
+                    <li {% if current_brand == brand.name %}class="active"{% endif %}>
+                        <a href="{% url 'catalog_by_brand' brand.name %}">{{ brand.name }}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            
+            {% if current_brand and brand_models %}
+            <div class="sidebar-section">
+                <h3>{{ current_brand }} модельдері</h3>
+                <ul class="model-list">
+                    {% for model in brand_models %}
+                    <li>
+                        <a href="{% url 'car_search' %}?model={{ model.id }}">{{ model.name }}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+            
+            <div class="sidebar-section">
+                <h3>Кеңейтілген іздеу</h3>
+                <a href="{% url 'car_search' %}" class="btn btn-outline btn-block">
+                    <i class="fas fa-search"></i> Іздеуге өту
+                </a>
+            </div>
+        </div>
+        
+        <div class="catalog-content">
+            <div class="catalog-header">
+                <div class="catalog-count">
+                    <p>Табылды: {{ paginator.count }} автокөлік</p>
+                </div>
+                
+                <div class="catalog-sort">
+                    <label for="sort">Сұрыптау:</label>
+                    <select id="sort" class="sort-select">
+                        <option value="newest" {% if sort == 'newest' %}selected{% endif %}>Жаңалығы бойынша</option>
+                        <option value="price_low" {% if sort == 'price_low' %}selected{% endif %}>Бағасы бойынша (арзаннан)</option>
+                        <option value="price_high" {% if sort == 'price_high' %}selected{% endif %}>Бағасы бойынша (қымбаттан)</option>
+                        <option value="year_new" {% if sort == 'year_new' %}selected{% endif %}>Жылы бойынша (жаңадан)</option>
+                        <option value="year_old" {% if sort == 'year_old' %}selected{% endif %}>Жылы бойынша (ескіден)</option>
+                    </select>
+                </div>
+            </div>
+            
+            {% if cars %}
+            <div class="car-grid">
+                {% for car in cars %}
+                <div class="car-card">
+                    <div class="car-image">
+                        <a href="{{ car.get_absolute_url }}">
+                            <img src="{{ car.image.url }}" alt="{{ car }}">
+                        </a>
+                    </div>
+                    <div class="car-details">
+                        <h3><a href="{{ car.get_absolute_url }}">{{ car }}</a></h3>
+                        <p class="car-price">{{ car.price_display }}</p>
+                        <p class="car-meta">{{ car.year }} ж., {{ car.mileage }} км</p>
+                        <a href="{{ car.get_absolute_url }}" class="btn btn-outline btn-sm">Толығырақ</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            {% include 'pagination.html' %}
+            
+            {% else %}
+            <div class="no-results">
+                <p>Бұл санатта әзірге автокөліктер жоқ.</p>
+                <p>Басқа брендті таңдап көріңіз немесе <a href="{% url 'catalog' %}">бүкіл каталогты шолыңыз</a>.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Сұрыптау өзгерісін өңдеу
+    document.addEventListener('DOMContentLoaded', function() {
+        const sortSelect = document.getElementById('sort');
+        
+        sortSelect.addEventListener('change', function() {
+            // Ағымдағы URL мен параметрлерді алу
+            const urlParams = new URLSearchParams(window.location.search);
+            
+            // Сұрыптау параметрін жаңарту немесе қосу
+            urlParams.set('sort', this.value);
+            
+            // Жаңа URL-ге өту
+            window.location.href = window.location.pathname + '?' + urlParams.toString();
+        });
+    });
+</script>
+{% endblock %}

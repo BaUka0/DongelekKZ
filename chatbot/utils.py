@@ -1,6 +1,7 @@
 import requests
 import json
 from django.conf import settings
+from django.urls import reverse
 from listings.models import Brand, Model, Car
 
 INTELLIGENCE_API_URL = getattr(settings, 'INTELLIGENCE_API_URL', "https://api.intelligence.io.solutions/api/v1/chat/completions")
@@ -14,6 +15,15 @@ MAX_RESPONSE_TOKENS = getattr(settings, 'CHATBOT_MAX_TOKENS', 1024)
 
 def handle_user_query_direct(user_input):
     lower_input = user_input.lower()
+
+    # Handle catalog and search related queries
+    if "каталог" in lower_input or "категории" in lower_input:
+        catalog_url = reverse('catalog')
+        return f"Вы можете просмотреть полный каталог автомобилей по ссылке: {catalog_url}\n\nТам вы найдете удобную навигацию по брендам и моделям."
+    
+    if "поиск" in lower_input or "найти" in lower_input or"искать" in lower_input:
+        search_url = reverse('car_search')
+        return f"Для поиска автомобилей воспользуйтесь нашей системой расширенного поиска: {search_url}\n\nТам вы сможете фильтровать по марке, модели, году выпуска, цене и другим параметрам."
 
     if "бренды" in lower_input or "марки" in lower_input:
         brands = Brand.objects.all().order_by('name')

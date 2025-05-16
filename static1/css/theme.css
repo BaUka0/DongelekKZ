@@ -1,0 +1,146 @@
+/**
+ * Global theme definitions for light/dark mode
+ */
+
+/* Base variables for light mode */
+:root {
+    /* Colors */
+    --primary-color: #3498db;
+    --primary-hover: #2980b9;
+    --secondary-color: #2ecc71;
+    --secondary-hover: #27ae60;
+    --danger-color: #e74c3c;
+    --warning-color: #f39c12;
+    --info-color: #3498db;
+    --success-color: #2ecc71;
+
+    /* Text */
+    --text-color: #333333;
+    --text-muted: #718096;
+    --text-light: #ffffff;
+    --heading-color: #1a202c;
+    
+    /* Backgrounds */
+    --body-bg: #f8fafc;
+    --card-bg: #ffffff;
+    --input-bg: #ffffff;
+    --hover-bg: #f7fafc;
+    
+    /* Status colors backgrounds */
+    --error-bg: #fff5f5;
+    --warning-bg: #fffbeb;
+    --info-bg: #ebf8ff;
+    --success-bg: #d4edda;
+    
+    /* Status colors text */
+    --error-color: #e53e3e;
+    --warning-color: #b45309;
+    --info-color: #3182ce;
+    --success-color: #155724;
+    
+    /* Borders */
+    --border-color: #e2e8f0;
+    --border-color-dark: #cbd5e0;
+    --border-radius: 6px;
+    --border-radius-lg: 10px;
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    
+    /* Animations */
+    --transition-speed: 0.3s;
+}
+
+/* Dark mode overrides */
+.dark-mode {
+    /* Colors */
+    --primary-color: #60a5fa;
+    --primary-hover: #3b82f6;
+    --secondary-color: #10b981;
+    --secondary-hover: #059669;
+    --danger-color: #f87171;
+    --warning-color: #fbbf24;
+    --info-color: #60a5fa;
+    --success-color: #34d399;
+
+    /* Text */
+    --text-color: #e2e8f0;
+    --text-muted: #94a3b8;
+    --heading-color: #f1f5f9;
+    
+    /* Backgrounds */
+    --body-bg: #0f172a;
+    --card-bg: #1e293b;
+    --input-bg: #2d3748;
+    --hover-bg: #2d3748;
+    
+    /* Status colors backgrounds */
+    --error-bg: #4a2428;
+    --warning-bg: #433420;
+    --info-bg: #1e3a5f;
+    --success-bg: #1c3a2b;
+    
+    /* Status colors text */
+    --error-color: #f87171;
+    --warning-color: #fbbf24;
+    --info-color: #60a5fa;
+    --success-color: #6ee7b7;
+    
+    /* Borders */
+    --border-color: #4a5568;
+    --border-color-dark: #1a202c;
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.15);
+}
+
+/* Smooth transitions for theme switching */
+body, button, a, input, select, textarea,
+.card, .form-control, .btn, .modal-content, 
+.form-container, .dropdown-menu, .nav-link {
+    transition: background-color var(--transition-speed) ease, 
+                color var(--transition-speed) ease, 
+                border-color var(--transition-speed) ease, 
+                box-shadow var(--transition-speed) ease;
+}
+
+/* Dark mode form controls */
+.dark-mode input, 
+.dark-mode select, 
+.dark-mode textarea {
+    background-color: var(--input-bg);
+    border-color: var(--border-color);
+    color: var(--text-color);
+}
+
+/* Dark mode buttons */
+.dark-mode .btn-outline {
+    color: var(--text-color);
+    border-color: var(--border-color);
+}
+
+.dark-mode .btn-outline:hover {
+    background-color: var(--hover-bg);
+}
+
+/* Dark mode select fields */
+.dark-mode select.form-control {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23e2e8f0' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+}
+
+/* Dark mode cards and containers */
+.dark-mode .card,
+.dark-mode .modal-content,
+.dark-mode .dropdown-menu,
+.dark-mode .form-container {
+    background-color: var(--card-bg);
+    border-color: var(--border-color);
+}

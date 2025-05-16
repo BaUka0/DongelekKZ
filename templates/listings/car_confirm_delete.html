@@ -1,139 +1,53 @@
 {% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Жоюды растау | Dongelek{% endblock %}
+{% block title %}Автокөлікті жою - Dongelek{% endblock %}
 
 {% block content %}
-<section class="delete-section">
-    <div class="container">
-        <div class="delete-container">
-            <div class="delete-icon">
-                <i class="fas fa-exclamation-triangle"></i>
+<div class="container">
+    <div class="page-header">
+        <h1>Автокөлікті жою</h1>
+    </div>
+    
+    <div class="delete-confirmation">
+        <div class="confirmation-card">
+            <div class="confirmation-header">
+                <i class="fas fa-exclamation-triangle warning-icon"></i>
+                <h2>Жоюды растау</h2>
             </div>
             
-            <h1 class="delete-title">Жариялауды жою</h1>
-            
-            <div class="delete-content">
-                <p class="delete-message">Сіз <strong>"{{ object }}"</strong> жариялауын жойғыңыз келетініне сенімдісіз бе?</p>
-                <p class="delete-warning">Бұл әрекетті кері қайтару мүмкін емес.</p>
+            <div class="confirmation-content">
+                <p>Сіз келесі автокөлікті жоймақсыз:</p>
                 
                 <div class="car-preview">
-                    {% if object.image %}
-                        <img src="{{ object.image.url }}" alt="{{ object }}" class="car-thumbnail">
+                    {% if car.image %}
+                    <div class="car-preview-image">
+                        <img src="{{ car.image.url }}" alt="{{ car }}">
+                    </div>
                     {% endif %}
-                    <div class="car-info">
-                        <div class="car-name">{{ object.brand }} {{ object.model }}</div>
-                        <div class="car-price">${{ object.price }}</div>
-                        <div class="car-year">{{ object.year }}</div>
+                    
+                    <div class="car-preview-details">
+                        <h3>{{ car }}</h3>
+                        <p class="car-price">{{ car.price_display }}</p>
+                        <p class="car-meta">{{ car.year }} ж., {{ car.mileage }} км</p>
                     </div>
                 </div>
                 
-                <form method="post" class="delete-form">
+                <p class="warning-text">Бұл әрекет қайтымсыз! Жою туралы шешіміңізді ойлап алыңыз.</p>
+            </div>
+            
+            <div class="confirmation-actions">
+                <form method="post">
                     {% csrf_token %}
-                    <div class="form-actions">
-                        <button type="submit" class="btn btn-danger">
-                            <i class="fas fa-trash"></i> Иә, жою
-                        </button>
-                        <a href="{{ object.get_absolute_url }}" class="btn btn-outline">
-                            <i class="fas fa-times"></i> Жоқ, бас тарту
-                        </a>
-                    </div>
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash-alt"></i> Жою
+                    </button>
+                    <a href="{{ car.get_absolute_url }}" class="btn btn-outline">
+                        <i class="fas fa-times"></i> Болдырмау
+                    </a>
                 </form>
             </div>
         </div>
     </div>
-</section>
-
-<style>
-    .delete-section {
-        padding: 3rem 0;
-    }
-    
-    .delete-container {
-        max-width: 600px;
-        margin: 0 auto;
-        background-color: #ffffff;
-        border-radius: 0.5rem;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        padding: 2rem;
-        text-align: center;
-    }
-    
-    .delete-icon {
-        font-size: 3rem;
-        color: #ef4444;
-        margin-bottom: 1rem;
-    }
-    
-    .delete-title {
-        font-size: 1.8rem;
-        font-weight: 700;
-        color: #1e293b;
-        margin-bottom: 1.5rem;
-    }
-    
-    .delete-content {
-        text-align: left;
-    }
-    
-    .delete-message {
-        font-size: 1.1rem;
-        color: #1e293b;
-        margin-bottom: 0.5rem;
-    }
-    
-    .delete-warning {
-        color: #ef4444;
-        font-size: 0.9rem;
-        margin-bottom: 1.5rem;
-    }
-    
-    .car-preview {
-        display: flex;
-        align-items: center;
-        padding: 1rem;
-        background-color: #f8fafc;
-        border-radius: 0.5rem;
-        margin-bottom: 1.5rem;
-        border: 1px solid #e2e8f0;
-    }
-    
-    .car-thumbnail {
-        width: 100px;
-        height: 70px;
-        object-fit: cover;
-        border-radius: 0.25rem;
-        margin-right: 1rem;
-    }
-    
-    .car-info {
-        flex-grow: 1;
-    }
-    
-    .car-name {
-        font-weight: 600;
-        color: #1e293b;
-        margin-bottom: 0.25rem;
-    }
-    
-    .car-price {
-        color: #2563eb;
-        font-weight: 600;
-        font-size: 1.1rem;
-    }
-    
-    .car-year {
-        color: #64748b;
-        font-size: 0.875rem;
-    }
-    
-    .delete-form {
-        margin-top: 1.5rem;
-    }
-    
-    .form-actions {
-        display: flex;
-        justify-content: center;
-        gap: 1rem;
-    }
-</style>
+</div>
 {% endblock %}

@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Автокөлік іздеу - Dongelek{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="page-header">
+        <h1>Автокөлік іздеу</h1>
+    </div>
+    
+    <div class="search-container">
+        <form method="get" action="{% url 'car_search' %}" class="search-form">
+            <div class="search-controls">
+                <div class="search-field">
+                    <label for="query">Іздеу:</label>
+                    <input type="text" id="query" name="query" placeholder="Бренд, модель немесе сипаттаманы енгізіңіз" value="{{ query }}">
+                </div>
+                
+                <div class="search-field">
+                    <label for="brand">Бренд:</label>
+                    <select id="brand" name="brand">
+                        <option value="">Барлық брендтер</option>
+                        {% for brand in brands %}
+                        <option value="{{ brand.id }}" {% if brand.id|stringformat:"i" == brand_id %}selected{% endif %}>{{ brand.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="search-field">
+                    <label for="model">Модель:</label>
+                    <select id="model" name="model">
+                        <option value="">Барлық модельдер</option>
+                        {% for model in models %}
+                        <option value="{{ model.id }}" {% if model.id|stringformat:"i" == model_id %}selected{% endif %}>{{ model.brand.name }} {{ model.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            
+            <div class="search-controls">
+                <div class="search-field">
+                    <label for="min_price">Баға, бастап:</label>
+                    <input type="number" id="min_price" name="min_price" placeholder="Мин. баға" value="{{ min_price }}">
+                </div>
+                
+                <div class="search-field">
+                    <label for="max_price">Баға, дейін:</label>
+                    <input type="number" id="max_price" name="max_price" placeholder="Макс. баға" value="{{ max_price }}">
+                </div>
+                
+                <div class="search-field">
+                    <label for="min_year">Жылы, бастап:</label>
+                    <input type="number" id="min_year" name="min_year" placeholder="Мин. жыл" value="{{ min_year }}">
+                </div>
+                
+                <div class="search-field">
+                    <label for="max_year">Жылы, дейін:</label>
+                    <input type="number" id="max_year" name="max_year" placeholder="Макс. жыл" value="{{ max_year }}">
+                </div>
+            </div>
+            
+            <div class="search-buttons">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-search"></i> Іздеу
+                </button>
+                <a href="{% url 'car_search' %}" class="btn btn-outline">
+                    <i class="fas fa-times"></i> Тазалау
+                </a>
+            </div>
+        </form>
+    </div>
+    
+    <div class="search-results">
+        <div class="results-header">
+            <h2>Іздеу нәтижелері</h2>
+            <p>Табылды: {{ paginator.count }} автокөлік</p>
+        </div>
+        
+        {% if cars %}
+        <div class="car-grid">
+            {% for car in cars %}
+            <div class="car-card">
+                <div class="car-image">
+                    <a href="{{ car.get_absolute_url }}">
+                        <img src="{{ car.image.url }}" alt="{{ car }}">
+                    </a>
+                </div>
+                <div class="car-details">
+                    <h3><a href="{{ car.get_absolute_url }}">{{ car }}</a></h3>
+                    <p class="car-price">{{ car.price_display }}</p>
+                    <p class="car-meta">{{ car.year }} ж., {{ car.mileage }} км</p>
+                    <a href="{{ car.get_absolute_url }}" class="btn btn-outline btn-sm">Толығырақ</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        {% include 'pagination.html' %}
+        
+        {% else %}
+        <div class="no-results">
+            <p>Сіздің сұрауыңыз бойынша ештеңе табылмады.</p>
+            <p>Іздеу параметрлерін өзгертіп көріңіз немесе <a href="{% url 'catalog' %}">каталогты шолыңыз</a>.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Бренд өзгерген кезде модельдерді динамикалық сүзу
+    document.addEventListener('DOMContentLoaded', function() {
+        const brandSelect = document.getElementById('brand');
+        const modelSelect = document.getElementById('model');
+        const models = {{ models|safe }};
+        
+        brandSelect.addEventListener('change', function() {
+            const brandId = this.value;
+            
+            // Ағымдағы опцияларды тазалау
+            modelSelect.innerHTML = '<option value="">Барлық модельдер</option>';
+            
+            if (brandId) {
+                // Бренд бойынша модельдерді сүзіп, оларды қосу
+                const filteredModels = models.filter(model => model.brand_id == brandId);
+                filteredModels.forEach(model => {
+                    const option = document.createElement('option');
+                    option.value = model.id;
+                    option.textContent = model.name;
+                    modelSelect.appendChild(option);
+                });
+            }
+        });
+    });
+</script>
+{% endblock %}
