@@ -103,3 +103,16 @@ def resend_otp(request):
     send_otp(user)
     messages.success(request, 'Код был переотправлен на вашу почту.')
     return HttpResponseRedirect(reverse('login_with_otp'))
+
+def become_seller(request):
+    """
+    View to handle user requests to become a seller
+    """
+    if request.method == 'POST':
+        # Process the form submission to upgrade the user to seller status
+        request.user.is_seller = True
+        request.user.save()
+        messages.success(request, 'Сіз сәтті сатушы болдыңыз!')
+        return redirect('index')
+    
+    return render(request, 'accounts/become_seller.html')

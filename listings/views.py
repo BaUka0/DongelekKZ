@@ -182,6 +182,23 @@ class CarDeleteView(SellerRequiredMixin, DeleteView):
         car = self.get_object()
         return car.seller == self.request.user or self.request.user.is_admin
 
+class SellerDashboardView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+    model = Car
+    template_name = 'listings/seller_dashboard.html'
+    context_object_name = 'cars'
+    paginate_by = 10
+    
+    def test_func(self):
+        return self.request.user.is_seller
+    
+    def get_queryset(self):
+        return Car.objects.filter(seller=self.request.user).order_by('-created_at')
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['total_listings'] = self.get_queryset().count()
+        return context
+
 @login_required
 @require_POST
 def create_brand(request):

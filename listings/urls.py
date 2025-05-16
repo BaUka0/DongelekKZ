@@ -10,6 +10,7 @@ from .views import (
     create_brand,
     create_model,
     get_models_by_brand,
+    SellerDashboardView,
 )
 
 urlpatterns = [
@@ -21,6 +22,7 @@ urlpatterns = [
     path('search/', CarSearchView.as_view(), name='car_search'),
     path('catalog/', CarCatalogView.as_view(), name='catalog'),
     path('catalog/<str:brand_slug>/', CarCatalogView.as_view(), name='catalog_by_brand'),
+    path('dashboard/', SellerDashboardView.as_view(), name='seller_dashboard'),
     
     # API endpoints
     path('api/brands/create/', create_brand, name='create_brand'),

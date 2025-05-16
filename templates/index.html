@@ -18,10 +18,12 @@
                 <a href="{% url 'catalog' %}" class="btn btn-primary btn-lg">
                     <i class="fas fa-search"></i> Автокөлік табу
                 </a>
-                {% if user.is_authenticated and user.is_seller %}
-                    <a href="{% url 'car_create' %}" class="btn btn-outline btn-lg">
-                        <i class="fas fa-plus-circle"></i> Жарнама қосу
-                    </a>
+                {% if user.is_authenticated %}
+                    {% if user.is_seller %}
+                        <a href="{% url 'car_create' %}" class="btn btn-outline btn-lg">
+                            <i class="fas fa-plus-circle"></i> Жарнама қосу
+                        </a>
+                    {% endif %}
                 {% else %}
                     <a href="{% url 'signup' %}" class="btn btn-outline btn-lg">
                         <i class="fas fa-user-plus"></i> Тіркелу
@@ -118,10 +120,16 @@
                 Біздің платформа - автокөлік нарығындағы сенімді серіктес.
             </p>
             <div class="cta-buttons">
-                {% if user.is_authenticated and user.is_seller %}
-                    <a href="{% url 'car_create' %}" class="btn btn-light btn-lg">
-                        <i class="fas fa-plus-circle"></i> Автокөлікті сатуға қою
-                    </a>
+                {% if user.is_authenticated %}
+                    {% if user.is_seller %}
+                        <a href="{% url 'car_create' %}" class="btn btn-light btn-lg">
+                            <i class="fas fa-plus-circle"></i> Автокөлікті сатуға қою
+                        </a>
+                    {% else %}
+                        <a href="{% url 'become_seller' %}" class="btn btn-light btn-lg">
+                            <i class="fas fa-store"></i> Сатушы болу
+                        </a>
+                    {% endif %}
                 {% else %}
                     <a href="{% url 'signup' %}" class="btn btn-light btn-lg">
                         <i class="fas fa-user-plus"></i> Тіркелу
