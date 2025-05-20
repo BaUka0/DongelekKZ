@@ -227,4 +227,35 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!brandSelect.value) {
         modelSelect.disabled = true;
     }
+
+    // Обработка предварительного просмотра изображения
+    const imageInput = document.getElementById('id_image');
+    if (imageInput) {
+        imageInput.addEventListener('change', function(event) {
+            const fileInput = event.target;
+            const fileInfo = document.querySelector('.file-info');
+            const preview = document.getElementById('image-preview');
+            
+            if (fileInput.files && fileInput.files[0]) {
+                const file = fileInput.files[0];
+                fileInfo.textContent = file.name;
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.innerHTML = '';
+                    preview.classList.remove('empty');
+                    
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.alt = 'Алдын ала көрініс';
+                    preview.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            } else {
+                fileInfo.textContent = 'Файл таңдалмаған';
+                preview.innerHTML = '<span class="preview-text">Алдын ала көрініс</span>';
+                preview.classList.add('empty');
+            }
+        });
+    }
 });

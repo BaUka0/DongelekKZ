@@ -82,11 +82,33 @@
             
             <div class="form-group">
                 <label for="{{ form.image.id_for_label }}">Фото:</label>
-                {{ form.image }}
+                <div class="image-upload-container">
+                    <div class="image-upload-wrapper">
+                        <label for="{{ form.image.id_for_label }}" class="custom-file-upload">
+                            <i class="fas fa-cloud-upload-alt"></i> Фото таңдау
+                        </label>
+                        <div class="file-info">Файл таңдалмаған</div>
+                        {{ form.image }}
+                    </div>
+                    
+                    <div class="image-preview-container">
+                        <div id="image-preview" class="image-preview empty">
+                            <span class="preview-text">Алдын ала көрініс</span>
+                        </div>
+                    </div>
+                </div>
+                
                 {% if object and object.image %}
                 <div class="current-image">
-                    <p>Ағымдағы фото:</p>
-                    <img src="{{ object.image.url }}" alt="{{ object }}" class="thumbnail">
+                    <h4>Ағымдағы фото</h4>
+                    <div class="current-image-container">
+                        <img src="{{ object.image.url }}" alt="{{ object }}" class="current-thumbnail">
+                        <div class="image-overlay">
+                            <a href="{{ object.image.url }}" target="_blank" class="image-action">
+                                <i class="fas fa-search-plus"></i>
+                            </a>
+                        </div>
+                    </div>
                 </div>
                 {% endif %}
             </div>
@@ -157,4 +179,33 @@
 
 {% block extra_js %}
 <script src="{% static 'js/car_form.js' %}"></script>
+<script>
+    // Обработка предварительного просмотра изображения
+    document.getElementById('{{ form.image.id_for_label }}').addEventListener('change', function(event) {
+        const fileInput = event.target;
+        const fileInfo = document.querySelector('.file-info');
+        const preview = document.getElementById('image-preview');
+        
+        if (fileInput.files && fileInput.files[0]) {
+            const file = fileInput.files[0];
+            fileInfo.textContent = file.name;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.innerHTML = '';
+                preview.classList.remove('empty');
+                
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.alt = 'Алдын ала көрініс';
+                preview.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        } else {
+            fileInfo.textContent = 'Файл таңдалмаған';
+            preview.innerHTML = '<span class="preview-text">Алдын ала көрініс</span>';
+            preview.classList.add('empty');
+        }
+    });
+</script>
 {% endblock %}

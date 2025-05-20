@@ -80,25 +80,6 @@ textarea.form-control {
     margin-top: 20px;
 }
 
-/* Current Image */
-.current-image {
-    margin-top: 10px;
-}
-
-.current-image p {
-    margin-bottom: 8px;
-    font-weight: 500;
-    color: var(--text-color);
-}
-
-.current-image .thumbnail {
-    max-width: 200px;
-    max-height: 150px;
-    border-radius: 4px;
-    border: 1px solid var(--border-color);
-    object-fit: cover;
-}
-
 /* Form Errors */
 .form-errors {
     margin-bottom: 20px;
@@ -274,6 +255,157 @@ textarea.form-control {
     border-color: var(--text-muted);
 }
 
+/* Стили для контейнера загрузки изображения */
+.image-upload-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.image-upload-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Скрываем стандартный input file */
+input[type="file"] {
+    opacity: 0;
+    width: 0.1px;
+    height: 0.1px;
+    position: absolute;
+}
+
+/* Стилизованная кнопка выбора файла */
+.custom-file-upload {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.custom-file-upload:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.custom-file-upload i {
+    margin-right: 8px;
+}
+
+/* Информация о выбранном файле */
+.file-info {
+    color: #555;
+    font-size: 0.9em;
+}
+
+/* Контейнер для превью изображения */
+.image-preview-container {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.image-preview {
+    width: 100%;
+    height: 200px;
+    border: 2px dashed #ddd;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+    background-color: #f9f9f9;
+}
+
+.image-preview.empty {
+    background-color: #f9f9f9;
+    color: #aaa;
+}
+
+.image-preview img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.preview-text {
+    color: #aaa;
+    font-style: italic;
+}
+
+/* Текущее изображение */
+.current-image {
+    margin-top: 25px;
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+}
+
+.current-image h4 {
+    margin-bottom: 15px;
+    color: #333;
+    font-weight: 600;
+}
+
+.current-image-container {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.current-thumbnail {
+    display: block;
+    max-width: 100%;
+    max-height: 300px;
+    object-fit: contain;
+}
+
+/* Эффекты наведения и оверлей */
+.image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.current-image-container:hover .image-overlay {
+    opacity: 1;
+}
+
+.image-action {
+    color: white;
+    font-size: 1.5em;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.5);
+    transition: all 0.2s ease;
+}
+
+.image-action:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+    transform: scale(1.1);
+}
+
 /* Responsive Styles */
 @media (max-width: 768px) {
     .form-row {
@@ -297,4 +429,38 @@ textarea.form-control {
     .form-actions .btn {
         width: 100%;
     }
+}
+
+/* Dark mode adjustments */
+.dark-mode .custom-file-upload {
+    background-color: var(--primary-color);
+}
+
+.dark-mode .custom-file-upload:hover {
+    background-color: var(--primary-hover);
+}
+
+.dark-mode .file-info {
+    color: var(--text-color);
+}
+
+.dark-mode .image-preview {
+    border-color: var(--border-color);
+    background-color: var(--hover-bg);
+}
+
+.dark-mode .image-preview.empty {
+    background-color: var(--hover-bg);
+}
+
+.dark-mode .preview-text {
+    color: var(--text-muted);
+}
+
+.dark-mode .current-image {
+    border-top-color: var(--border-color);
+}
+
+.dark-mode .current-image h4 {
+    color: var(--heading-color);
 }

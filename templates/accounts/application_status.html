@@ -4,7 +4,7 @@
 
 {% block content %}
 <section class="auth-section">
-    <div class="auth-container">
+    <div class="auth-container wider-container">
         <div class="auth-header">
             <h1 class="auth-title">Сатушы болу өтініші</h1>
             <p class="auth-subtitle">Өтінішіңіздің мәртебесін тексеріңіз</p>
@@ -133,6 +133,12 @@
 </section>
 
 <style>
+    .wider-container {
+        max-width: 900px;
+        width: 100%;
+        margin: 0 auto;
+    }
+    
     .application-status-container {
         margin-top: 1.5rem;
     }
@@ -216,6 +222,7 @@
         border-radius: 0.375rem;
         color: var(--text-color);
         line-height: 1.6;
+        word-break: break-word;
     }
     
     .status-actions {
@@ -326,6 +333,66 @@
     .empty-state p {
         margin-bottom: 1.5rem;
         color: var(--text-muted);
+    }
+    
+    /* Responsive styles */
+    @media (max-width: 767px) {
+        .wider-container {
+            padding: 1rem;
+        }
+        
+        .status-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+        
+        .status-badge {
+            align-self: flex-start;
+        }
+        
+        .history-item {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+        
+        .history-date {
+            margin-right: 0;
+        }
+        
+        .history-toggle {
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+        }
+    }
+    
+    @media (min-width: 768px) and (max-width: 991px) {
+        .wider-container {
+            max-width: 90%;
+        }
+    }
+    
+    /* Dark mode specific adjustments */
+    .dark-mode .status-pending .status-badge {
+        background-color: rgba(255, 193, 7, 0.2);
+        color: #ffc107;
+    }
+    
+    .dark-mode .status-approved .status-badge {
+        background-color: rgba(40, 167, 69, 0.2);
+        color: #28a745;
+    }
+    
+    .dark-mode .status-rejected .status-badge {
+        background-color: rgba(220, 53, 69, 0.2);
+        color: #dc3545;
+    }
+    
+    .dark-mode .detail-text {
+        background-color: var(--card-bg);
+        border: 1px solid var(--border-color);
     }
 </style>
 
