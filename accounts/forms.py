@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from .models import CustomUser
+from .models import CustomUser, SellerApplication
 
 class CustomUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
@@ -23,3 +23,21 @@ class ProfileUpdateForm(forms.ModelForm):
 
 class OTPVerificationForm(forms.Form):
     code = forms.CharField(max_length=6, label="Введите код", widget=forms.TextInput(attrs={'class': 'form-control'}))
+
+class SellerApplicationForm(forms.ModelForm):
+    class Meta:
+        model = SellerApplication
+        fields = ['reason']
+        widgets = {
+            'reason': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 4,
+                'placeholder': 'Сатушы болу себебіңізді жазыңыз...'
+            }),
+        }
+        labels = {
+            'reason': 'Сатушы болу себебі',
+        }
+        help_texts = {
+            'reason': 'Өзіңіз жайлы және неліктен сатушы болғыңыз келетінін жазыңыз',
+        }

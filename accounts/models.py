@@ -71,7 +71,7 @@ class CustomUser(AbstractUser):
         return self.username
 
 class OTPCode(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='otp_code')
     code = models.CharField(max_length=6)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -80,3 +80,47 @@ class OTPCode(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.code}"
+
+class SellerApplication(models.Model):
+    STATUS_CHOICES = (
+        ('pending', 'Күтуде'),
+        ('approved', 'Бекітілген'),
+        ('rejected', 'Қабылданбаған'),
+    )
+    
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='seller_applications')
+    reason = models.TextField(verbose_name='Сатушы болу себебі')
+    created_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending', verbose_name='Мәртебесі')
+    reviewed_at = models.DateTimeField(null=True, blank=True, verbose_name='Қаралған уақыты')
+    admin_comment = models.TextField(blank=True, null=True, verbose_name='Әкімші түсініктемесі')
+    
+    class Meta:
+        verbose_name = 'Сатушы болу өтініші'
+        verbose_name_plural = 'Сатушы болу өтініштері'
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return f"{self.user.username} - {self.get_status_display()}"
+    
+    def approve(self, admin_comment=None):
+        from django.utils import timezone
+        self.status = 'approved'
+        self.reviewed_at = timezone.now()
+        if admin_comment:
+            self.admin_comment = admin_comment
+        self.save()
+        
+        self.user.role = CustomUser.Role.SELLER
+        self.user.save()
+        
+        return True
+    
+    def reject(self, admin_comment=None):
+        from django.utils import timezone
+        self.status = 'rejected'
+        self.reviewed_at = timezone.now()
+        if admin_comment:
+            self.admin_comment = admin_comment
+        self.save()
+        return True

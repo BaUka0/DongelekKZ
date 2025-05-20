@@ -82,6 +82,15 @@
                                     <a href="{% url 'car_create' %}" class="dropdown-item">
                                         <i class="fas fa-plus-circle"></i> Жариялау қосу
                                     </a>
+                                {% else %}
+                                    <a href="{% url 'become_seller' %}" class="dropdown-item">
+                                        <i class="fas fa-store"></i> Сатушы болу
+                                    </a>
+                                    {% if user.seller_applications.exists %}
+                                        <a href="{% url 'application_status' %}" class="dropdown-item">
+                                            <i class="fas fa-clipboard-check"></i> Өтініш мәртебесі
+                                        </a>
+                                    {% endif %}
                                 {% endif %}
                                 <form method="post" action="{% url 'logout' %}">
                                     {% csrf_token %}

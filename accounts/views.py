@@ -8,8 +8,10 @@ from django.core.mail import send_mail
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from .models import CustomUser, OTPCode
-from .forms import CustomUserCreationForm, ProfileUpdateForm, OTPVerificationForm
+from django.utils import timezone
+from django.contrib.auth.decorators import login_required
+from .models import CustomUser, OTPCode, SellerApplication
+from .forms import CustomUserCreationForm, ProfileUpdateForm, OTPVerificationForm, SellerApplicationForm
 import random
 import os
 from django.conf import settings
@@ -24,6 +26,7 @@ class SignUpView(CreateView):
         user = self.object
         send_otp(user)
         self.request.session['user_id'] = user.id
+        self.request.session['otp_sent'] = True  # Set flag to indicate OTP was sent
         return redirect('login_with_otp')
 
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
@@ -52,8 +55,8 @@ def send_otp(user):
     code = f"{random.randint(100000, 999999)}"
     OTPCode.objects.update_or_create(user=user, defaults={'code': code})
     send_mail(
-        'Ваш одноразовый код',
-        f'Ваш код для входа: {code}',
+        'Сіздің бір реттік кодыңыз',
+        f'Кіру үшін кодыңыз: {code}',
         'bauirzhan.bisan@yandex.ru',
         [user.email],
         fail_silently=False,
@@ -62,7 +65,7 @@ def send_otp(user):
 def login_with_otp(request):
     user_id = request.session.get('user_id')
     if not user_id:
-        messages.error(request, 'Сессия истекла. Пожалуйста, зарегистрируйтесь или войдите снова.')
+        messages.error(request, 'Сессия аяқталды. Тіркеліңіз немесе қайта кіріңіз.')
         return redirect('signup')
 
     user = CustomUser.objects.get(id=user_id)
@@ -79,40 +82,106 @@ def login_with_otp(request):
                     login(request, user)
                     otp.delete()
                     del request.session['user_id']
+                    if 'otp_sent' in request.session:
+                        del request.session['otp_sent']
                     return redirect('index')
                 else:
-                    messages.error(request, 'Код истек. Попробуйте снова.')
+                    messages.error(request, 'Код мерзімі өтіп кетті. Қайталап көріңіз.')
                     return render(request, 'accounts/otp_verification.html', {'form': form})
             except OTPCode.DoesNotExist:
-                messages.error(request, 'Неверный код.')
+                messages.error(request, 'Қате код.')
                 return render(request, 'accounts/otp_verification.html', {'form': form})
     else:
-        send_otp(user)  # Отправляем код повторно
+        # Only send a new OTP if one wasn't sent already during signup
+        if not request.session.get('otp_sent'):
+            send_otp(user)
+            messages.info(request, 'Код сіздің поштаңызға жіберілді.')
+        else:
+            # If already sent, just display the message without sending a new code
+            messages.info(request, 'Поштаңызға жіберілген кодты енгізіңіз.')
+            # Reset the flag for future requests if needed
+            request.session['otp_sent'] = False
+            
         form = OTPVerificationForm()
-        messages.info(request, 'Код отправлен на вашу почту.')
 
     return render(request, 'accounts/otp_verification.html', {'form': form})
 
 def resend_otp(request):
     user_id = request.session.get('user_id')
     if not user_id:
-        messages.error(request, 'Сессия истекла. Пожалуйста, зарегистрируйтесь или войдите снова.')
+        messages.error(request, 'Сессия аяқталды. Тіркеліңіз немесе қайта кіріңіз.')
         return redirect('signup')
 
     user = CustomUser.objects.get(id=user_id)
     send_otp(user)
-    messages.success(request, 'Код был переотправлен на вашу почту.')
+    # Set the flag to avoid automatic resending in the login_with_otp view
+    request.session['otp_sent'] = True
+    messages.success(request, 'Код сіздің поштаңызға қайта жіберілді.')
     return HttpResponseRedirect(reverse('login_with_otp'))
 
+@login_required
 def become_seller(request):
     """
-    View to handle user requests to become a seller
+    View to handle user requests to apply to become a seller
     """
-    if request.method == 'POST':
-        # Process the form submission to upgrade the user to seller status
-        request.user.is_seller = True
-        request.user.save()
-        messages.success(request, 'Сіз сәтті сатушы болдыңыз!')
+    # Check if user is already a seller
+    if request.user.is_seller:
+        messages.info(request, 'Сіз қазірдің өзінде сатушысыз.')
         return redirect('index')
     
-    return render(request, 'accounts/become_seller.html')
+    # Check if user already has a pending application
+    existing_application = SellerApplication.objects.filter(
+        user=request.user, 
+        status='pending'
+    ).first()
+    
+    if existing_application:
+        messages.info(request, 'Сіздің өтінішіңіз қаралуда. Күте тұрыңыз.')
+        return render(request, 'accounts/application_status.html', {
+            'application': existing_application
+        })
+    
+    # Check if user has a rejected application
+    rejected_application = SellerApplication.objects.filter(
+        user=request.user, 
+        status='rejected'
+    ).order_by('-created_at').first()
+    
+    if request.method == 'POST':
+        form = SellerApplicationForm(request.POST)
+        if form.is_valid():
+            application = form.save(commit=False)
+            application.user = request.user
+            application.save()
+            
+            messages.success(request, 'Сіздің өтінішіңіз қабылданды. Әкімші қарағаннан кейін хабарланамыз.')
+            return redirect('application_status')
+    else:
+        # Pre-fill the form with reason from a rejected application if it exists
+        initial_data = {}
+        if rejected_application:
+            initial_data = {'reason': rejected_application.reason}
+        
+        form = SellerApplicationForm(initial=initial_data)
+    
+    context = {
+        'form': form,
+        'rejected_application': rejected_application
+    }
+    return render(request, 'accounts/become_seller.html', context)
+
+@login_required
+def application_status(request):
+    """
+    View to show the status of a user's seller application
+    """
+    applications = SellerApplication.objects.filter(user=request.user).order_by('-created_at')
+    
+    if not applications.exists():
+        messages.info(request, 'Сізде әлі өтініш жоқ.')
+        return redirect('become_seller')
+    
+    return render(request, 'accounts/application_status.html', {
+        'applications': applications,
+        'current_application': applications.first()
+    })

@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import SignUpView, ProfileUpdateView, login_with_otp, resend_otp, become_seller
+from .views import SignUpView, ProfileUpdateView, login_with_otp, resend_otp, become_seller, application_status
 
 urlpatterns = [
     path('signup/', SignUpView.as_view(), name='signup'),
@@ -7,4 +7,5 @@ urlpatterns = [
     path('login/otp/', login_with_otp, name='login_with_otp'),
     path('login/otp/resend/', resend_otp, name='resend_otp'),
     path('become-seller/', become_seller, name='become_seller'),
+    path('application-status/', application_status, name='application_status'),
 ]

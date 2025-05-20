@@ -23,6 +23,10 @@
                         <a href="{% url 'car_create' %}" class="btn btn-outline btn-lg">
                             <i class="fas fa-plus-circle"></i> Жарнама қосу
                         </a>
+                    {% else %}
+                        <a href="{% url 'become_seller' %}" class="btn btn-outline btn-lg">
+                            <i class="fas fa-store"></i> Сатушы болу
+                        </a>
                     {% endif %}
                 {% else %}
                     <a href="{% url 'signup' %}" class="btn btn-outline btn-lg">
